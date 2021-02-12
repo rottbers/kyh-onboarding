@@ -1,0 +1,6 @@
+@font-face {
+  font-family: 'Regio mono';
+  font-weight: 400;
+  src: url('./regio-mono-regular.woff2') format('woff2'),
+    url('./regio-mono-regular.woff') format('woff');
+}

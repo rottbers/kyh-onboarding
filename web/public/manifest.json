@@ -1,0 +1,14 @@
+{
+  "name": "KYH",
+  "short_name": "KYH",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#ff6205",
+  "background_color": "#ffffff",
+  "display": "standalone"
+}
