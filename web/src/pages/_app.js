@@ -1,21 +1,8 @@
-import router from 'next/router';
 import Head from 'next/head';
 import '../fonts/index.css';
 import '../styles/tailwind.css';
 
-import { FirebaseProvider, useFirebase } from '../contexts/Firebase';
-
-// TODO: ...
-const RouteAuthorization = ({ children }) => {
-  const { isLoading, isAuthenticated } = useFirebase();
-
-  if (isLoading) return <p>Loading...</p>;
-  if (!isAuthenticated && router.pathname !== '/signin') {
-    router.push('/signin');
-    return <p>Loading...</p>;
-  }
-  return children;
-};
+import { FirebaseProvider, FirebaseAuthorization } from '../contexts/Firebase';
 
 export default function MyApp({ Component, pageProps }) {
   return (
@@ -45,9 +32,9 @@ export default function MyApp({ Component, pageProps }) {
         <link rel="manifest" href="/manifest.json" />
       </Head>
       <FirebaseProvider>
-        <RouteAuthorization>
+        <FirebaseAuthorization>
           <Component {...pageProps} />
-        </RouteAuthorization>
+        </FirebaseAuthorization>
       </FirebaseProvider>
     </>
   );
