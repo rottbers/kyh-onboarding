@@ -1,32 +1,59 @@
 import { useEffect, useState } from 'react';
 import router from 'next/router';
 import Head from 'next/head';
+import { FaGoogle } from 'react-icons/fa';
 
+import Spinner from '../components/Spinner';
 import Logo from '../components/Logo';
 
 import { useFirebase } from '../contexts/Firebase';
 
 export default function SignInPage() {
-  const { isAuthenticated, isLoading, user, firebase } = useFirebase();
-  const [email, setEmail] = useState('');
+  const { firebase } = useFirebase();
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
 
-  useEffect(() => {
-    if (!isLoading && isAuthenticated) {
-      router.push(user?.programId && user?.locationId ? '/' : '/setup');
-    }
-  }, [isLoading, isAuthenticated, user, router]);
-
-  // TODO: ...
-  async function onSubmit(e) {
+  function handleSignInRequest(e) {
     e.preventDefault();
+    setIsLoading(true);
+    setIsError(false);
 
     const provider = new firebase.auth.GoogleAuthProvider();
-    provider.setCustomParameters({ login_hint: email });
-
-    await firebase.auth().signInWithRedirect(provider);
+    provider.setCustomParameters({ prompt: 'select_account' });
+    firebase.auth().useDeviceLanguage();
+    firebase.auth().signInWithRedirect(provider);
   }
 
-  const isValidEmail = RegExp(/^.+?@student.kyh.se$/gim).test(email);
+  useEffect(() => {
+    async function handleSignInResponse() {
+      setIsLoading(true);
+
+      try {
+        const { user } = await firebase.auth().getRedirectResult();
+        if (!user) return setIsLoading(false);
+
+        const isValidEmail = RegExp(/^.+?@student.kyh.se$/gim).test(user.email);
+        if (!isValidEmail)
+          throw new Error(
+            `${user.email} is unauthorized. Make sure you sign in using a @student.kyh.se account.`
+          );
+
+        const userDocumentRef = firebase.firestore().doc(`users/${user.uid}`);
+        const userDocument = await userDocumentRef.get();
+        if (!userDocument.exists) await userDocumentRef.set({});
+
+        const { programId, locationId } = userDocument.data();
+        router.push(programId && locationId ? '/' : '/setup');
+      } catch (error) {
+        setIsError(error);
+        setIsLoading(false);
+      }
+    }
+
+    handleSignInResponse();
+  }, [firebase]);
+
+  if (isLoading) return <Spinner fullscreen />;
 
   return (
     <>
@@ -37,26 +64,32 @@ export default function SignInPage() {
         <h1 className="text-3xl sm:text-4xl text-center mb-8">
           <Logo className="inline-block h-8 sm:h-10" /> | Onboarding
         </h1>
-        <form onSubmit={onSubmit} className="flex flex-col w-full md:w-96 mt-4">
-          <label htmlFor="email" className="font-semibold mb-1">
-            Email
-          </label>
-          <input
-            type="email"
-            placeholder="jane.doe@student.kyh.se"
-            className="mb-4 rounded-sm bg-transparent border-gray-900"
-            name="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+        <p className="text-center">
+          Onboarding requires a <b>@student.kyh.se</b> Google account provided
+          by faculty.
+        </p>
+        <form
+          onSubmit={handleSignInRequest}
+          className="flex flex-col w-full md:w-96 mt-4"
+        >
           <button
             type="submit"
-            disabled={!isValidEmail}
-            className="w-full mt-4 py-3 font-semibold bg-brand text-white border border-brand disabled:border-gray-400 disabled:bg-transparent disabled:text-gray-400 disabled:cursor-default rounded-sm focus:outline-none focus:ring"
+            disabled={isLoading}
+            className="flex justify-center items-center w-full mt-4 py-3 font-semibold bg-brand text-white border border-brand disabled:border-gray-400 disabled:bg-transparent disabled:text-gray-400 disabled:cursor-default rounded-sm focus:outline-none focus:ring"
           >
-            Sign in
+            <span className="not-sr-only mr-1">
+              <FaGoogle />
+            </span>{' '}
+            Sign in with Google
           </button>
+          {isError && (
+            <p
+              className="mt-4 text-center text-brand-red font-normal"
+              role="alert"
+            >
+              ✋ {isError?.message || 'Something went wrong'}
+            </p>
+          )}
         </form>
       </main>
     </>
