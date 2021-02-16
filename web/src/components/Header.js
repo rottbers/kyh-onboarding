@@ -25,6 +25,7 @@ const Header = ({ isDarkBackground }) => {
         </a>{' '}
         |{' '}
         <Link href="/">
+          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <a
             className={`${
               isDarkBackground

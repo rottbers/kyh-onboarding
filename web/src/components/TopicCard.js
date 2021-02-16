@@ -1,5 +1,3 @@
-import { FaAngleRight } from 'react-icons/fa';
-
 const TopicCard = ({ title, image, isRead }) => (
   <li
     className={`group w-full h-full rounded shadow hover:shadow-lg relative flex flex-col ${
@@ -15,9 +13,6 @@ const TopicCard = ({ title, image, isRead }) => (
     <h3 className="text-lg text-white p-4 group-hover:underline mr-10">
       {title}
     </h3>
-    {/* <div className="rounded-full h-8 w-8 bg-white text-gray-900 flex items-center justify-center text-lg absolute right-2 bottom-2">
-      <FaAngleRight />
-    </div> */}
   </li>
 );
 

@@ -56,22 +56,26 @@ export default function SetupPage({ locations }) {
         {isFirstVisit ? (
           <>
             <p className="mb-2">
-              Hey 👋! Hope you’re excited! We’re looking forward to have you at
-              KYH starting this semester.
+              Hey{' '}
+              <span role="img" aria-label="wave emoji">
+                👋
+              </span>
+              ! Hope you’re excited! We’re looking forward to have you at KYH
+              starting this semester.
             </p>
             <p className="mb-2">
               We know you may have questions so we created this website to
               hopefully answer some of them.
             </p>
             <p className="mb-2">
-              Now that you're signed in, select your location and program to
-              start onboarding.
+              Now that you&apos;re signed in, select your location and program
+              to start onboarding.
             </p>
           </>
         ) : (
           <p className="mb-2">
-            Picked the wrong location or program? Don't worry, just update it
-            below.
+            Picked the wrong location or program? Don&apos;t worry, just update
+            it below.
           </p>
         )}
 
@@ -85,7 +89,7 @@ export default function SetupPage({ locations }) {
             name="location"
             id="location"
             value={locationId}
-            onChange={(e) => setLocationId(e.target.value)}
+            onBlur={(e) => setLocationId(e.target.value)}
           >
             <option hidden value={undefined}>
               -
@@ -117,7 +121,7 @@ export default function SetupPage({ locations }) {
             name="program"
             id="program"
             value={programId}
-            onChange={(e) => setProgramId(e.target.value)}
+            onBlur={(e) => setProgramId(e.target.value)}
           >
             <option hidden value={undefined}>
               -
@@ -145,7 +149,10 @@ export default function SetupPage({ locations }) {
               className="mt-4 text-center text-brand-red font-normal"
               role="alert"
             >
-              ✋ {isError?.message || 'Something went wrong'}
+              <span role="img" aria-label="hand emoji">
+                ✋
+              </span>{' '}
+              {isError?.message || 'Something went wrong'}
             </p>
           )}
         </form>
