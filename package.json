@@ -4,9 +4,11 @@
   "scripts": {
     "start:studio": "yarn workspace studio start",
     "build:studio": "yarn workspace studio build",
+    "lint:studio": "yarn workspace studio lint",
     "start:web": "yarn workspace web dev",
     "build:web": "yarn workspace web build",
-    "serve:web": "yarn workspace web start"
+    "serve:web": "yarn workspace web start",
+    "lint:web": "yarn workspace web lint"
   },
   "workspaces": {
     "packages": [
