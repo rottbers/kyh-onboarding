@@ -5,6 +5,7 @@ const TopicsGrid = ({ topics, isRead }) => (
   <ul className="grid gap-4 auto-rows-auto md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
     {topics.map((topic) => (
       <Link key={topic._id} href={`/topic/${topic._id}`}>
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a className="rounded focus:outline-none focus:ring">
           <TopicCard title={topic.title} image={topic?.image} isRead={isRead} />
         </a>

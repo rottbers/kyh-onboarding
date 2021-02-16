@@ -81,7 +81,7 @@ export const FirebaseAuthorization = ({ children }) => {
     case 'loading':
       return <Spinner fullscreen />;
     case 'error':
-      return <p>Error 😔</p>; // TODO: deal with error state
+      return <p>Error...</p>; // TODO: deal with error state
     case 'unauthenticated': {
       if (router.pathname !== '/signin') {
         router.push('/signin');

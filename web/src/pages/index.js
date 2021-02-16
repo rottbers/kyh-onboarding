@@ -32,7 +32,12 @@ export default function TopicsPage({ topics }) {
             {topics ? (
               <TopicsGrid topics={unreadTopics} isRead={false} />
             ) : (
-              <p>Hmmm... no topics found 🙈</p>
+              <p>
+                Hmmm... no topics found{' '}
+                <span role="img" aria-label="see no evil emoji">
+                  🙈
+                </span>
+              </p>
             )}
           </>
         )}

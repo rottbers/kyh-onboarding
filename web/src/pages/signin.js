@@ -87,7 +87,10 @@ export default function SignInPage() {
               className="mt-4 text-center text-brand-red font-normal"
               role="alert"
             >
-              ✋ {isError?.message || 'Something went wrong'}
+              <span role="img" aria-label="hand emoji">
+                ✋
+              </span>{' '}
+              {isError?.message || 'Something went wrong'}
             </p>
           )}
         </form>

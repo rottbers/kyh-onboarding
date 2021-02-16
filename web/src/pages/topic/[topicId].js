@@ -71,6 +71,7 @@ export default function TopicPage({ topic, topics }) {
                   </span>
                 </p>
                 <Link href={`/topic/${nextTopic._id}`}>
+                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                   <a className="font-normal underline">{nextTopic.title}</a>
                 </Link>
               </>
@@ -84,6 +85,7 @@ export default function TopicPage({ topic, topics }) {
               </span>
             </p>
             <Link href="/">
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <a className="font-normal underline">Browse all topics</a>
             </Link>
           </div>
