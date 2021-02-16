@@ -7,10 +7,10 @@ import TopicsGrid from '../components/TopicsGrid';
 import { useFirebase } from '../contexts/Firebase';
 import sanityClient from '../utils/sanityClient';
 
-export default function TopicsPage({ allTopics }) {
+export default function TopicsPage({ topics }) {
   const { user } = useFirebase();
 
-  const topics = allTopics; // TODO: filter topics based on users location & program
+  // TODO: filter topics based on users location & program
   const unreadTopics = topics.filter((topic) => !user?.readTopics?.includes(topic._id)); // prettier-ignore
   const readTopics = topics.filter((topic) => user?.readTopics?.includes(topic._id)); // prettier-ignore
 
@@ -29,7 +29,7 @@ export default function TopicsPage({ allTopics }) {
         {unreadTopics.length > 0 && (
           <>
             <h2 className="text-2xl mt-8 sm:mt-12 mb-2">Unread topics</h2>
-            {allTopics ? (
+            {topics ? (
               <TopicsGrid topics={unreadTopics} isRead={false} />
             ) : (
               <p>Hmmm... no topics found 🙈</p>
@@ -48,13 +48,13 @@ export default function TopicsPage({ allTopics }) {
 }
 
 export async function getStaticProps() {
-  const allTopics = await sanityClient.fetch(
-    `*[_type == "topic"] {
+  const topics = await sanityClient.fetch(
+    `*[_type == "topic" && !(_id in path('drafts.**'))] {
       _id,
       title,
       "image": image.asset->.url,
     }`
   );
 
-  return { props: { allTopics } };
+  return { props: { topics } };
 }

@@ -3,6 +3,7 @@ import Head from 'next/head';
 import router from 'next/router';
 
 import Logo from '../components/Logo';
+import Spinner from '../components/Spinner';
 
 import { useFirebase } from '../contexts/Firebase';
 import sanityClient from '../utils/sanityClient';
@@ -39,7 +40,7 @@ export default function SetupPage({ locations }) {
     }
   }
 
-  if (!firebase && !user) return <Spinner />;
+  if (isLoading) return <Spinner fullscreen />;
 
   const isFirstVisit = !user?.locationId && !user?.programId;
 
@@ -155,7 +156,7 @@ export default function SetupPage({ locations }) {
 
 export async function getStaticProps() {
   const locations = await sanityClient.fetch(
-    `*[_type == "location"] {
+    `*[_type == "location" && !(_id in path('drafts.**'))] {
       _id,
       title,
       "programs": programs[]-> {
