@@ -10,7 +10,7 @@ import TopicQuestion from '../../components/TopicQuestion';
 import { useFirebase } from '../../contexts/Firebase';
 import sanityClient from '../../utils/sanityClient';
 
-export default function TopicPage({ topic }) {
+export default function TopicPage({ topic, topics }) {
   const { firebase, user } = useFirebase();
 
   useEffect(() => {
@@ -22,7 +22,10 @@ export default function TopicPage({ topic }) {
       .update({
         readTopics: firebase.firestore.FieldValue.arrayUnion(topic._id),
       });
-  }, [user, firebase]);
+  }, [firebase, user, topic]);
+
+  // TODO: filter topics based on users location & program
+  const nextTopic = topics.filter((topic) => !user?.readTopics?.includes(topic._id))[0]; // prettier-ignore
 
   const { title, body, image, questions } = topic;
 
@@ -60,15 +63,18 @@ export default function TopicPage({ topic }) {
         </article>
         <nav className="max-w-2xl mx-auto flex flex-row-reverse justify-between border-t border-gray-200 pt-4">
           <div className="text-right w-1/2">
-            <p>
-              <span className="text-gray-600 inline-flex items-center">
-                Next topic <MdArrowForward className="inline-block ml-1" />
-              </span>
-            </p>
-            {/* TODO: make dynamic based on users unread topics */}
-            <Link href="/topic/8f1f15f4-4a15-4338-a1a4-83878e3df9b7">
-              <a className="font-normal underline">The Stockholm facilities</a>
-            </Link>
+            {nextTopic && (
+              <>
+                <p>
+                  <span className="text-gray-600 inline-flex items-center">
+                    Next topic <MdArrowForward className="inline-block ml-1" />
+                  </span>
+                </p>
+                <Link href={`/topic/${nextTopic._id}`}>
+                  <a className="font-normal underline">{nextTopic.title}</a>
+                </Link>
+              </>
+            )}
           </div>
           <div className="w-1/2">
             <p>
@@ -89,7 +95,7 @@ export default function TopicPage({ topic }) {
 
 export async function getStaticPaths() {
   const topics = await sanityClient.fetch(
-    `*[_type == "topic"] {
+    `*[_type == "topic" && !(_id in path('drafts.**'))] {
       _id
     }`
   );
@@ -101,7 +107,7 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
   const topic = await sanityClient.fetch(
-    `*[_type == "topic" && _id == "${params.topicId}"][0] {
+    `*[_type == "topic" && _id == "${params.topicId}" && !(_id in path('drafts.**'))][0] {
       _id,
       "image": image.asset->.url,
       title,
@@ -113,8 +119,15 @@ export async function getStaticProps({ params }) {
         },
       },
       questions,
-  }`
+    }`
   );
 
-  return { props: { topic } };
+  const topics = await sanityClient.fetch(
+    `*[_type == "topic" && !(_id in path('drafts.**'))] {
+      _id,
+      title,
+    }`
+  );
+
+  return { props: { topic, topics } };
 }
