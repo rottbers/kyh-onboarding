@@ -89,7 +89,7 @@ export default function SetupPage({ locations }) {
             name="location"
             id="location"
             value={locationId}
-            onBlur={(e) => setLocationId(e.target.value)}
+            onChange={(e) => setLocationId(e.target.value)}
           >
             <option hidden value={undefined}>
               -
@@ -121,7 +121,7 @@ export default function SetupPage({ locations }) {
             name="program"
             id="program"
             value={programId}
-            onBlur={(e) => setProgramId(e.target.value)}
+            onChange={(e) => setProgramId(e.target.value)}
           >
             <option hidden value={undefined}>
               -
