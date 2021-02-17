@@ -9,7 +9,8 @@
     "build:web": "yarn workspace web build",
     "serve:web": "yarn workspace web start",
     "lint:web": "yarn workspace web lint",
-    "build": "yarn build:studio && yarn build:web"
+    "build": "yarn lint && yarn build:studio && yarn build:web",
+    "lint": "yarn lint:studio && yarn lint:web"
   },
   "workspaces": {
     "packages": [
