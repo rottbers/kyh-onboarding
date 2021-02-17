@@ -8,14 +8,15 @@
     "lint": "eslint schemas/"
   },
   "dependencies": {
-    "@sanity/base": "^2.3.6",
+    "@sanity/base": "^2.3.7",
     "@sanity/cli": "^2.2.6",
     "@sanity/components": "^2.2.6",
     "@sanity/core": "^2.3.3",
-    "@sanity/default-layout": "^2.3.6",
+    "@sanity/default-layout": "^2.3.7",
     "@sanity/default-login": "^2.2.6",
-    "@sanity/desk-tool": "^2.3.6",
+    "@sanity/desk-tool": "^2.3.7",
     "@sanity/vision": "^2.2.6",
+    "get-youtube-id": "^1.0.1",
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
@@ -24,6 +25,9 @@
   "devDependencies": {
     "eslint": "^7.20.0",
     "eslint-config-prettier": "^7.2.0",
-    "eslint-plugin-import": "^2.22.1"
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.22.0",
+    "eslint-plugin-react-hooks": "^4.2.0"
   }
 }

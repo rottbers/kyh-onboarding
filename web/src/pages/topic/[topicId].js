@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import BlockContent from '@sanity/block-content-to-react';
 import { MdDashboard, MdArrowForward } from 'react-icons/md';
 
 import Header from '../../components/Header';
-import TopicQuestion from '../../components/TopicQuestion';
+import TopicBlockContent from '../../components/TopicBlockContent';
+import TopicQuestions from '../../components/TopicQuestions';
 
 import { useFirebase } from '../../contexts/Firebase';
 import sanityClient from '../../utils/sanityClient';
@@ -45,20 +45,9 @@ export default function TopicPage({ topic, topics }) {
               {title}
             </h1>
           </header>
-          <div className="topic-content max-w-2xl mx-auto my-6">
-            <BlockContent blocks={body} />
-            {questions && (
-              <>
-                <h2>Frequently asked questions</h2>
-                {questions.map(({ _key, question, answer }) => (
-                  <TopicQuestion
-                    key={_key}
-                    questionHeading={question}
-                    answerBody={answer}
-                  />
-                ))}
-              </>
-            )}
+          <div className="max-w-2xl mx-auto my-6">
+            <TopicBlockContent blocks={body} />
+            <TopicQuestions questions={questions} />
           </div>
         </article>
         <nav className="max-w-2xl mx-auto flex flex-row-reverse justify-between border-t border-gray-200 pt-4">
@@ -118,6 +107,12 @@ export async function getStaticProps({ params }) {
         asset-> {
           ...,
           "_key": _id
+        },
+        image {
+          ...,
+          asset-> {
+          ...,
+          }
         },
       },
       questions,

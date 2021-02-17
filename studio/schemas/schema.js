@@ -5,7 +5,10 @@ import program from './documents/program';
 import location from './documents/location';
 import topic from './documents/topic';
 
+import figure from './objects/figure';
+import youtube from './objects/youtube';
+
 export default createSchema({
   name: 'default',
-  types: schemaTypes.concat([program, location, topic]),
+  types: schemaTypes.concat([program, location, topic, figure, youtube]),
 });
