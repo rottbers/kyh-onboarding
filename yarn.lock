@@ -1284,9 +1284,10 @@
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@sanity/asset-utils/-/asset-utils-1.1.2.tgz#d6b4b875bee4189cb56f274a7fb5494174463cb2"
 
-"@sanity/base@2.3.6", "@sanity/base@^2.3.6":
-  version "2.3.6"
-  resolved "https://registry.npmjs.org/@sanity/base/-/base-2.3.6.tgz#8a21cbd250f64ce460cd4f0584a60edccda48efa"
+"@sanity/base@2.3.7", "@sanity/base@^2.3.7":
+  version "2.3.7"
+  resolved "https://registry.yarnpkg.com/@sanity/base/-/base-2.3.7.tgz#e6a5a3001ac95bc7727ecd652571b2fa5d01ee3f"
+  integrity sha512-Cbj3FTAoKTv1rwEbgAnr5G1Hd/ALALiuAT20jI0OA2u/2ePrPe1+SagB/zk7Y/z1t04eeDQUtLZ+iDj2yEmB9A==
   dependencies:
     "@popperjs/core" "^2.5.4"
     "@reach/auto-id" "^0.10.5"
@@ -1303,7 +1304,7 @@
     "@sanity/structure" "2.2.6"
     "@sanity/transaction-collator" "2.2.6"
     "@sanity/types" "2.2.6"
-    "@sanity/ui" "^0.33.1"
+    "@sanity/ui" "^0.33.4"
     "@sanity/util" "2.2.6"
     "@sanity/validation" "2.2.6"
     boundless-arrow-key-navigation "^1.1.0"
@@ -1400,9 +1401,10 @@
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@sanity/color/-/color-1.0.0.tgz#6cc44d4a8f6da4567828f52f141deed4d17aa31e"
 
-"@sanity/color@^2.0.12":
-  version "2.0.12"
-  resolved "https://registry.yarnpkg.com/@sanity/color/-/color-2.0.12.tgz#b5a9e3aaadbc28779f8589ee07e1a747ea5ea0cf"
+"@sanity/color@^2.0.13":
+  version "2.0.13"
+  resolved "https://registry.yarnpkg.com/@sanity/color/-/color-2.0.13.tgz#78af52b694db99a70d522d56bb04adb7ffd5ab24"
+  integrity sha512-GFEISBxQm1qLm3CIg+wctYqZNTAyQw6fUUv144+yJpMORsAJ0dR5rcFQmQNOcYrTJMO/J7XiD31/Q/Lm1eoVIA==
 
 "@sanity/components@^2.2.6":
   version "2.2.6"
@@ -1488,13 +1490,14 @@
     "@sanity/generate-help-url" "2.2.6"
     lodash "^4.17.15"
 
-"@sanity/default-layout@^2.3.6":
-  version "2.3.6"
-  resolved "https://registry.npmjs.org/@sanity/default-layout/-/default-layout-2.3.6.tgz#326fcf39d1bcca8fd6cf86727c6b335289edcf06"
+"@sanity/default-layout@^2.3.7":
+  version "2.3.7"
+  resolved "https://registry.yarnpkg.com/@sanity/default-layout/-/default-layout-2.3.7.tgz#7d8fb3e01812b9faaf444788e471007adfe14f73"
+  integrity sha512-GiC2tdkMZoKBuhfpzzfKgFDD9QNcQ+qSw9opcrpU/G+dVnvfrzF7iBHDOkezelurXaTG0agm5aUrfSip+111/g==
   dependencies:
-    "@sanity/base" "2.3.6"
+    "@sanity/base" "2.3.7"
     "@sanity/generate-help-url" "2.2.6"
-    "@sanity/ui" "^0.33.1"
+    "@sanity/ui" "^0.33.4"
     "@sanity/util" "2.2.6"
     classnames "^2.2.5"
     is-hotkey "^0.1.4"
@@ -1512,23 +1515,24 @@
     prop-types "^15.6.0"
     rxjs "^6.5.3"
 
-"@sanity/desk-tool@^2.3.6":
-  version "2.3.6"
-  resolved "https://registry.npmjs.org/@sanity/desk-tool/-/desk-tool-2.3.6.tgz#1269af2e3806a6250e2e1092dca736aa08e0ee93"
+"@sanity/desk-tool@^2.3.7":
+  version "2.3.7"
+  resolved "https://registry.yarnpkg.com/@sanity/desk-tool/-/desk-tool-2.3.7.tgz#49283356b5a7e5b2a18bc764d6c5f4c40ebc4ead"
+  integrity sha512-75B7ed+M1vzD6/P8q2dja98jVw4aihzf4nmiBe6mkQsaRsMoCvLXHzWOdQvv3o1hKda3SXoYGmKbQ+bRlWQaSA==
   dependencies:
     "@popperjs/core" "^2.5.4"
     "@reach/auto-id" "^0.10.5"
-    "@sanity/base" "2.3.6"
+    "@sanity/base" "2.3.7"
     "@sanity/data-aspects" "2.2.6"
     "@sanity/diff" "2.2.6"
-    "@sanity/field" "2.3.6"
-    "@sanity/form-builder" "2.3.6"
+    "@sanity/field" "2.3.7"
+    "@sanity/form-builder" "2.3.7"
     "@sanity/generate-help-url" "2.2.6"
     "@sanity/mutator" "2.2.6"
     "@sanity/react-hooks" "2.2.6"
     "@sanity/structure" "2.2.6"
     "@sanity/types" "2.2.6"
-    "@sanity/ui" "^0.33.1"
+    "@sanity/ui" "^0.33.4"
     "@sanity/util" "2.2.6"
     "@sanity/uuid" "^3.0.1"
     boundless-arrow-key-navigation "^1.1.0"
@@ -1585,26 +1589,28 @@
     simple-get "^4.0.0"
     split2 "^3.2.2"
 
-"@sanity/field@2.3.6":
-  version "2.3.6"
-  resolved "https://registry.npmjs.org/@sanity/field/-/field-2.3.6.tgz#50b0389c9a848b7bf718fbd6d196c607b5e55b88"
+"@sanity/field@2.3.7":
+  version "2.3.7"
+  resolved "https://registry.yarnpkg.com/@sanity/field/-/field-2.3.7.tgz#af2974647dd262fdd52b12a210e0d785a2fee254"
+  integrity sha512-gSLhu5GdoDBRtgBT90+8ut6GX3I/EzoL1aErqe8MgDAcRoxDiDbZkvgxO5Mek5JonX/UgvyBGab/kw//jiplnw==
   dependencies:
     "@sanity/asset-utils" "^1.1.2"
-    "@sanity/base" "2.3.6"
+    "@sanity/base" "2.3.7"
     "@sanity/diff" "2.2.6"
     "@sanity/react-hooks" "2.2.6"
     "@sanity/types" "2.2.6"
-    "@sanity/ui" "^0.33.1"
+    "@sanity/ui" "^0.33.4"
     "@sanity/util" "2.2.6"
     date-fns "^2.16.1"
     sanity-diff-patch "^1.0.9"
     styled-components "^5.2.1"
 
-"@sanity/form-builder@2.3.6":
-  version "2.3.6"
-  resolved "https://registry.npmjs.org/@sanity/form-builder/-/form-builder-2.3.6.tgz#836013df45b4b5e199994a7d79f83a00f0053d96"
+"@sanity/form-builder@2.3.7":
+  version "2.3.7"
+  resolved "https://registry.yarnpkg.com/@sanity/form-builder/-/form-builder-2.3.7.tgz#0ed99db6f72d377b82821b13360c56bd0c9aa66b"
+  integrity sha512-TpP1InzodUdFaiP/GJpicT0y1zvd22sO84zn6YK0tfxhfhpP3j7SOBphVPphHK2r0zmvvqZ0b4WeP2E9QnYa8Q==
   dependencies:
-    "@sanity/base" "2.3.6"
+    "@sanity/base" "2.3.7"
     "@sanity/block-tools" "2.2.6"
     "@sanity/generate-help-url" "2.2.6"
     "@sanity/icons" "^1.0.1"
@@ -1612,7 +1618,7 @@
     "@sanity/mutator" "2.2.6"
     "@sanity/portable-text-editor" "0.1.25"
     "@sanity/types" "2.2.6"
-    "@sanity/ui" "^0.33.1"
+    "@sanity/ui" "^0.33.4"
     "@sanity/util" "2.2.6"
     "@sanity/uuid" "^3.0.1"
     attr-accept "^1.1.0"
@@ -1653,9 +1659,14 @@
   version "0.140.0"
   resolved "https://registry.yarnpkg.com/@sanity/generate-help-url/-/generate-help-url-0.140.0.tgz#f60ab75be5fdc346b9f0d1c2a0858aa3c2870109"
 
-"@sanity/icons@^1.0.1", "@sanity/icons@^1.0.2":
+"@sanity/icons@^1.0.1":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@sanity/icons/-/icons-1.0.2.tgz#cc53a33bd4727e4ad171e4fd4a462e9f0ef287b4"
+
+"@sanity/icons@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@sanity/icons/-/icons-1.0.3.tgz#5720417e04cfffbaf14f8d7bb4d71fed3b2606f0"
+  integrity sha512-Q5dB73IqUnaJ4am1fD4fkMwsaq1wOTbrpqmDhwfucwiSzGIn8oP8FV9Vfb+HbpSwcnRYdpOR/w+QeUReXToyuQ==
 
 "@sanity/image-url@^0.140.15", "@sanity/image-url@^0.140.19":
   version "0.140.19"
@@ -1875,15 +1886,16 @@
   dependencies:
     "@types/react" "^17.0.0"
 
-"@sanity/ui@^0.33.1":
-  version "0.33.1"
-  resolved "https://registry.npmjs.org/@sanity/ui/-/ui-0.33.1.tgz#ca637de1ab7f5750ef4cb591a55f15e45217f91f"
+"@sanity/ui@^0.33.4":
+  version "0.33.4"
+  resolved "https://registry.yarnpkg.com/@sanity/ui/-/ui-0.33.4.tgz#5c2b8ffbf4e0d91479d3ea43db36ea6356c68f5c"
+  integrity sha512-vfcg0MtkFtx1nNlqaZvnZIgVe9Pa252wkgU3JPQskW6g2N/vmI6O/c5hK7WjFSs3wEixHAwgYWJf6unEyKOorQ==
   dependencies:
     "@juggle/resize-observer" "^3.2.0"
     "@popperjs/core" "^2.6.0"
     "@reach/auto-id" "^0.13.0"
-    "@sanity/color" "^2.0.12"
-    "@sanity/icons" "^1.0.2"
+    "@sanity/color" "^2.0.13"
+    "@sanity/icons" "^1.0.3"
     framer-motion "^3.3.0"
     popper-max-size-modifier "^0.2.0"
     react-is "^17.0.1"
@@ -5191,6 +5203,11 @@ get-window@^1.1.1:
   resolved "https://registry.yarnpkg.com/get-window/-/get-window-1.1.2.tgz#65fbaa999fb87f86ea5d30770f4097707044f47f"
   dependencies:
     get-document "1"
+
+get-youtube-id@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/get-youtube-id/-/get-youtube-id-1.0.1.tgz#adb6f475e292d98f98ed5bfb530887656193e157"
+  integrity sha512-5yidLzoLXbtw82a/Wb7LrajkGn29BM6JuLWeHyNfzOGp1weGyW4+7eMz6cP23+etqj27VlOFtq8fFFDMLq/FXQ==
 
 getpass@^0.1.1:
   version "0.1.7"

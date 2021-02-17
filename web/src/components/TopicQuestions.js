@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { FaPlus, FaMinus } from 'react-icons/fa';
-import BlockContent from '@sanity/block-content-to-react';
+import TopicBlockContent from './TopicBlockContent';
 
 const TopicQuestion = ({ questionHeading, answerBody }) => {
   const [open, setOpen] = useState(false);
 
-  // TODO: improve click area and make a11y
+  // TODO: improve click area, styles and a11y
   return (
     <div className="my-4">
       <div className="flex flex-row">
@@ -18,11 +18,28 @@ const TopicQuestion = ({ questionHeading, answerBody }) => {
         </button>
         <h3 className="text-lg">{questionHeading}</h3>
       </div>
-      <div className={`px-8 font-light ${open ? '' : 'hidden'}`}>
-        <BlockContent blocks={answerBody} />
+      <div className={`px-8 ${open ? '' : 'hidden'}`}>
+        <TopicBlockContent blocks={answerBody} />
       </div>
     </div>
   );
 };
 
-export default TopicQuestion;
+const TopicQuestions = ({ questions }) => (
+  <>
+    {questions && (
+      <>
+        <h2 className="text-2xl mt-12 mb-1">Frequently asked questions</h2>
+        {questions.map(({ _key, question, answer }) => (
+          <TopicQuestion
+            key={_key}
+            questionHeading={question}
+            answerBody={answer}
+          />
+        ))}
+      </>
+    )}
+  </>
+);
+
+export default TopicQuestions;
