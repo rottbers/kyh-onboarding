@@ -26,6 +26,8 @@ export default {
     },
     // eslint-disable-next-line react/display-name
     component: ({ value }) => {
+      if (!value) return <div>Loading...</div>;
+
       const { url, caption } = value;
       const id = getYouTubeId(url);
 

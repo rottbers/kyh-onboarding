@@ -38,5 +38,6 @@ yarn
 yarn start:web
 
 # starts sanity studio dev server on http://localhost:3333
+# and is proxied via http://localhost:3000/studio (when start:web is running)
 yarn start:studio
 ```

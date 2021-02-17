@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "build": "yarn lint && sanity build",
+    "build": "sanity build ../web/public/studio -y",
     "start": "sanity start",
     "lint": "eslint schemas/"
   },
