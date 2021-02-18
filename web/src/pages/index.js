@@ -61,5 +61,5 @@ export async function getStaticProps() {
     }`
   );
 
-  return { props: { topics } };
+  return { props: { topics }, revalidate: 30 };
 }

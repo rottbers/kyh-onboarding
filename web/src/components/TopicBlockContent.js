@@ -42,7 +42,7 @@ const TopicBlockContent = ({ blocks }) => {
                 frameBorder="0"
                 allowFullScreen
                 loading="lazy"
-                referrerpolicy="no-referrer"
+                referrerPolicy="no-referrer"
               />
             </div>
             {caption && <figcaption>{caption}</figcaption>}
@@ -54,7 +54,12 @@ const TopicBlockContent = ({ blocks }) => {
 
   return (
     <div className="topic-content">
-      <BlockContent blocks={blocks} serializers={serializers} />
+      <BlockContent
+        blocks={blocks}
+        serializers={serializers}
+        projectId="oo5ws9d6"
+        dataset="production"
+      />
     </div>
   );
 };
