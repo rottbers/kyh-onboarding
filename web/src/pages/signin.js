@@ -42,8 +42,8 @@ export default function SignInPage() {
         const userDocument = await userDocumentRef.get();
         if (!userDocument.exists) await userDocumentRef.set({});
 
-        const { programId, locationId } = userDocument.data();
-        router.push(programId && locationId ? '/' : '/setup');
+        const data = userDocument.data();
+        router.push(data?.programId && data?.locationId ? '/' : '/setup');
       } catch (error) {
         setIsError(error);
         setIsLoading(false);
