@@ -1,8 +1,11 @@
 import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
+import ErrorPage from 'next/error';
 import { MdDashboard, MdArrowForward } from 'react-icons/md';
 
+import Spinner from '../../components/Spinner';
 import Header from '../../components/Header';
 import TopicBlockContent from '../../components/TopicBlockContent';
 import TopicQuestions from '../../components/TopicQuestions';
@@ -12,9 +15,12 @@ import sanityClient from '../../utils/sanityClient';
 
 export default function TopicPage({ topic, topics }) {
   const { firebase, user } = useFirebase();
+  const { isFallback } = useRouter();
+
+  const isNotFound = !topic || (typeof topic === 'object' && !Object.keys(topic).length); // prettier-ignore
 
   useEffect(() => {
-    if (!user || !firebase) return;
+    if (!user || !firebase || isNotFound) return;
 
     firebase
       .firestore()
@@ -22,7 +28,11 @@ export default function TopicPage({ topic, topics }) {
       .update({
         readTopics: firebase.firestore.FieldValue.arrayUnion(topic._id),
       });
-  }, [firebase, user, topic]);
+  }, [firebase, user, isNotFound, topic]);
+
+  if (isFallback) return <Spinner fullscreen />;
+
+  if (isNotFound) return <ErrorPage statusCode={404} />;
 
   // TODO: filter topics based on users location & program
   const nextTopic = topics.filter((topic) => !user?.readTopics?.includes(topic._id))[0]; // prettier-ignore
@@ -93,38 +103,32 @@ export async function getStaticPaths() {
 
   const paths = topics.map((topic) => ({ params: { topicId: topic._id } }));
 
-  return { paths, fallback: false };
+  return { paths, fallback: true };
 }
 
 export async function getStaticProps({ params }) {
-  const topic = await sanityClient.fetch(
-    `*[_type == "topic" && _id == "${params.topicId}" && !(_id in path('drafts.**'))][0] {
-      _id,
-      "image": image.asset->.url,
-      title,
-      body[] {
-        ...,
-        asset-> {
+  const { topic, topics } = await sanityClient.fetch(`
+    {
+      "topic": *[_type == "topic" && _id == "${params.topicId}" && !(_id in path('drafts.**'))][0] {
+        _id,
+        "image": image.asset->.url,
+        title,
+        body[] {
           ...,
-          "_key": _id
+          image {
+            ...,
+            asset-> {
+            ...,
+            }
+          },
         },
-        image {
-          ...,
-          asset-> {
-          ...,
-          }
-        },
+        questions,
       },
-      questions,
-    }`
-  );
+      "topics": *[_type == "topic" && !(_id in path('drafts.**'))] {
+        _id,
+        title,
+      }
+    }`);
 
-  const topics = await sanityClient.fetch(
-    `*[_type == "topic" && !(_id in path('drafts.**'))] {
-      _id,
-      title,
-    }`
-  );
-
-  return { props: { topic, topics } };
+  return { props: { topic, topics }, revalidate: 30 };
 }

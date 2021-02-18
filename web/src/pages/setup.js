@@ -173,5 +173,5 @@ export async function getStaticProps() {
     }`
   );
 
-  return { props: { locations } };
+  return { props: { locations }, revalidate: 30 };
 }
