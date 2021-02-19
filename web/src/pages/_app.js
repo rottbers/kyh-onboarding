@@ -4,7 +4,7 @@ import '../styles/tailwind.css';
 
 import { FirebaseProvider, FirebaseAuthorization } from '../contexts/Firebase';
 
-export default function MyApp({ Component, pageProps }) {
+export default function App({ Component, pageProps }) {
   return (
     <>
       <Head>
@@ -30,6 +30,17 @@ export default function MyApp({ Component, pageProps }) {
           href="/apple-touch-icon.png"
         />
         <link rel="manifest" href="/manifest.json" />
+        <title>KYH Onboarding</title>
+        {/* TODO: consider making a setting in the CMS, fixed URL for now */}
+        <meta
+          property="og:image"
+          content="https://kyh-onboarding.vercel.app/social.png"
+        />
+        <meta
+          property="twitter:image"
+          content="https://kyh-onboarding.vercel.app/social.png"
+        />
+        <meta property="twitter:card" content="summary_large_image" />
       </Head>
       <FirebaseProvider>
         <FirebaseAuthorization>
