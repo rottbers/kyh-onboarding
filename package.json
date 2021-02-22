@@ -9,6 +9,7 @@
     "build:web": "yarn workspace web build",
     "serve:web": "yarn workspace web start",
     "lint:web": "yarn workspace web lint",
+    "start": "concurrently yarn:start:*",
     "build": "yarn lint && yarn build:studio && yarn build:web",
     "lint": "yarn lint:studio && yarn lint:web"
   },
@@ -23,6 +24,7 @@
     ]
   },
   "devDependencies": {
+    "concurrently": "^5.3.0",
     "prettier": "^2.2.1"
   },
   "dependencies": {

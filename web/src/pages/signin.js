@@ -32,17 +32,20 @@ export default function SignInPage() {
         const { user } = await firebase.auth().getRedirectResult();
         if (!user) return setIsLoading(false);
 
-        const isValidEmail = RegExp(/^.+?@student.kyh.se$/gim).test(user.email);
-        if (!isValidEmail)
+        // TODO: validate email server side
+        const isValidEmail = RegExp(/^.+?@.*?kyh.se$/gi).test(user.email);
+        if (!isValidEmail) {
+          firebase.auth().signOut();
           throw new Error(
             `${user.email} is unauthorized. Make sure you sign in using a @student.kyh.se account.`
           );
+        }
 
         const userDocumentRef = firebase.firestore().doc(`users/${user.uid}`);
         const userDocument = await userDocumentRef.get();
         if (!userDocument.exists) await userDocumentRef.set({});
 
-        const data = userDocument.data();
+        const data = userDocument.data(); // TODO: check that programId and locationId still exists in CMS
         router.push(data?.programId && data?.locationId ? '/' : '/setup');
       } catch (error) {
         setIsError(error);
