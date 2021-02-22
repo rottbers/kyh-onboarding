@@ -21,7 +21,7 @@ export default function TopicsPage({ topics }) {
       </Head>
       <Header isDarkBackground={false} />
       <main className="p-4 container mx-auto">
-        <h1 className="text-3xl sm:text-4xl mb-4">Topics board</h1>
+        <h1 className="sr-only">Topics board</h1>
         <TopicsProgress
           readTopics={readTopics.length}
           totalTopics={topics.length}
