@@ -55,37 +55,41 @@ export default function TopicPage({ topic, topics }) {
               {title}
             </h1>
           </header>
-          <div className="max-w-2xl mx-auto my-6">
+          <div className="max-w-2xl mx-auto my-8">
             <TopicBlockContent blocks={body} />
             <TopicQuestions questions={questions} />
           </div>
         </article>
-        <nav className="max-w-2xl mx-auto flex flex-row-reverse justify-between border-t border-gray-200 pt-4">
+        <nav className="max-w-2xl mx-auto border-t border-gray-200 pt-8 pb-24 flex flex-row-reverse justify-between">
           <div className="text-right w-1/2">
             {nextTopic && (
               <>
                 <p>
-                  <span className="text-gray-600 inline-flex items-center">
+                  <span className="text-gray-500 inline-flex items-center h-8">
                     Next topic <MdArrowForward className="inline-block ml-1" />
                   </span>
                 </p>
                 <Link href={`/topic/${nextTopic._id}`}>
                   {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                  <a className="font-normal underline">{nextTopic.title}</a>
+                  <a className="font-normal text-gray-700 hover:underline-brand focus:underline-brand hover:underline focus:underline">
+                    {nextTopic.title}
+                  </a>
                 </Link>
               </>
             )}
           </div>
           <div className="w-1/2">
             <p>
-              <span className="text-gray-600 inline-flex items-center">
+              <span className="text-gray-500 inline-flex items-center h-8">
                 <MdDashboard className="inline-block mr-1" />
                 Topics board
               </span>
             </p>
             <Link href="/">
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <a className="font-normal underline">Browse all topics</a>
+              <a className="font-normal text-gray-700 hover:underline-brand focus:underline-brand hover:underline focus:underline">
+                Browse all topics
+              </a>
             </Link>
           </div>
         </nav>
