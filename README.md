@@ -17,7 +17,7 @@ This project is setup as a monorepo using [yarn workspaces](https://classic.yarn
 
 ### Get started
 
-Create a `.env.local` file in `web/` and add the following environment variables along with their corresponding values.
+Create a `.env.local` file in `web/` and add the following environment variables along with their corresponding values:
 
 ```bash
 SANITY_TOKEN = ""
