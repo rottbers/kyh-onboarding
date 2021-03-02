@@ -166,7 +166,7 @@ export async function getStaticProps() {
     `*[_type == "location" && !(_id in path('drafts.**'))] {
       _id,
       title,
-      "programs": programs[]-> {
+      "programs": *[_type == "program" && location._ref == ^._id && !(_id in path('drafts.**'))] {
         _id,
         title,
       }

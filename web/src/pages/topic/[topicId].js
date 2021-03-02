@@ -13,7 +13,7 @@ import TopicQuestions from '../../components/TopicQuestions';
 import { useFirebase } from '../../contexts/Firebase';
 import sanityClient from '../../utils/sanityClient';
 
-export default function TopicPage({ topic, topics }) {
+export default function TopicPage({ topic, allTopics }) {
   const { firebase, user } = useFirebase();
   const { isFallback, asPath } = useRouter();
 
@@ -32,7 +32,7 @@ export default function TopicPage({ topic, topics }) {
 
   const headingRef = useRef();
 
-  // To prevent the link for the next topic to be focused
+  // To prevent the link for the next topic to remain focused
   // we reset focus to the topic heading when the URL changes.
   useEffect(() => {
     if (!isNotFound || !isFallback) headingRef.current.focus();
@@ -42,7 +42,8 @@ export default function TopicPage({ topic, topics }) {
 
   if (isNotFound) return <ErrorPage statusCode={404} />;
 
-  // TODO: filter topics based on users location & program
+  const topics = allTopics.filter((topic) => topic?.programs?.includes(user?.programId)); // prettier-ignore
+  const readTopics = topics.filter((topic) => user?.readTopics?.includes(topic._id)); // prettier-ignore
   const nextTopic = topics.filter((topic) => !user?.readTopics?.includes(topic._id))[0]; // prettier-ignore
 
   const { title, body, image, questions } = topic;
@@ -78,9 +79,7 @@ export default function TopicPage({ topic, topics }) {
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <a className="group text-right w-full p-4 mb-4 sm:mb-0 rounded border border-gray-200 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none">
                 <p className="text-gray-500 text-sm flex flex-row items-center justify-end">
-                  {`Next topic (${user?.readTopics?.length + 1} / ${
-                    topics?.length
-                  })`}
+                  {`Next topic (${readTopics?.length + 1} / ${topics?.length})`}
                   <MdArrowForward
                     aria-hidden={true}
                     className="ml-1 text-brand"
@@ -131,7 +130,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-  const { topic, topics } = await sanityClient.fetch(`
+  const { topic, allTopics } = await sanityClient.fetch(`
     {
       "topic": *[_type == "topic" && _id == "${params.topicId}" && !(_id in path('drafts.**'))][0] {
         _id,
@@ -148,11 +147,12 @@ export async function getStaticProps({ params }) {
         },
         questions,
       },
-      "topics": *[_type == "topic" && !(_id in path('drafts.**'))] {
+      "allTopics": *[_type == "topic" && !(_id in path('drafts.**'))] {
         _id,
         title,
+        "programs": programs[]->._id,
       }
     }`);
 
-  return { props: { topic, topics }, revalidate: 30 };
+  return { props: { topic, allTopics }, revalidate: 30 };
 }
