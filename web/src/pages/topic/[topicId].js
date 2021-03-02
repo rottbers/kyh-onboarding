@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -15,7 +15,7 @@ import sanityClient from '../../utils/sanityClient';
 
 export default function TopicPage({ topic, topics }) {
   const { firebase, user } = useFirebase();
-  const { isFallback } = useRouter();
+  const { isFallback, asPath } = useRouter();
 
   const isNotFound = !topic || (typeof topic === 'object' && !Object.keys(topic).length); // prettier-ignore
 
@@ -29,6 +29,14 @@ export default function TopicPage({ topic, topics }) {
         readTopics: firebase.firestore.FieldValue.arrayUnion(topic._id),
       });
   }, [firebase, user, isNotFound, topic]);
+
+  const headingRef = useRef();
+
+  // To prevent the link for the next topic to be focused
+  // we reset focus to the topic heading when the URL changes.
+  useEffect(() => {
+    if (!isNotFound || !isFallback) headingRef.current.focus();
+  }, [isNotFound, isFallback, asPath]);
 
   if (isFallback) return <Spinner fullscreen />;
 
@@ -51,7 +59,11 @@ export default function TopicPage({ topic, topics }) {
             style={image && { backgroundImage: `url(${image})` }}
             className="bg-center bg-cover bg-gray-900 -mx-4 px-4 -mt-24 pt-32 pb-16 text-white"
           >
-            <h1 className="max-w-2xl mx-auto mt-12 sm:my-12 2xl:my-24 text-4xl sm:text-5xl md:text-6xl lg:text-7xl ">
+            <h1
+              className="max-w-2xl mx-auto mt-12 sm:my-12 2xl:my-24 text-4xl sm:text-5xl md:text-6xl lg:text-7xl focus:outline-none"
+              tabIndex="-1"
+              ref={headingRef}
+            >
               {title}
             </h1>
           </header>
@@ -60,38 +72,46 @@ export default function TopicPage({ topic, topics }) {
             <TopicQuestions questions={questions} />
           </div>
         </article>
-        <nav className="max-w-2xl mx-auto border-t border-gray-200 pt-8 pb-24 flex flex-row-reverse justify-between">
-          <div className="text-right w-1/2">
-            {nextTopic && (
-              <>
-                <p>
-                  <span className="text-gray-500 inline-flex items-center h-8">
-                    Next topic <MdArrowForward className="inline-block ml-1" />
-                  </span>
-                </p>
-                <Link href={`/topic/${nextTopic._id}`}>
-                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                  <a className="font-normal text-gray-700 hover:underline-brand focus:underline-brand hover:underline focus:underline">
-                    {nextTopic.title}
-                  </a>
-                </Link>
-              </>
-            )}
-          </div>
-          <div className="w-1/2">
-            <p>
-              <span className="text-gray-500 inline-flex items-center h-8">
-                <MdDashboard className="inline-block mr-1" />
-                Topics board
-              </span>
-            </p>
-            <Link href="/">
+        <nav className="max-w-2xl mx-auto border-t border-gray-200 pt-8 pb-24 flex flex-col sm:flex-row-reverse justify-between">
+          {nextTopic ? (
+            <Link href={`/topic/${nextTopic._id}`}>
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <a className="font-normal text-gray-700 hover:underline-brand focus:underline-brand hover:underline focus:underline">
-                Browse all topics
+              <a className="group text-right w-full p-4 mb-4 sm:mb-0 rounded border border-gray-200 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none">
+                <p className="text-gray-500 text-sm flex flex-row items-center justify-end">
+                  {`Next topic (${user?.readTopics?.length + 1} / ${
+                    topics?.length
+                  })`}
+                  <MdArrowForward
+                    aria-hidden={true}
+                    className="ml-1 text-brand"
+                  />
+                </p>
+                <p className="font-normal text-gray-700 group-hover:underline group-hover:underline-brand group-focus:underline group-focus:underline-brand">
+                  {nextTopic.title}
+                </p>
               </a>
             </Link>
-          </div>
+          ) : (
+            <div className="sm:w-full sm:p4" />
+          )}
+          <Link href="/">
+            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+            <a className="group w-full p-4 sm:mr-4 rounded border border-gray-200 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none">
+              <p className="text-gray-500 text-sm flex flex-row items-center justify-start">
+                <span>
+                  {' '}
+                  <MdDashboard
+                    aria-hidden={true}
+                    className="mr-1 text-gray-400"
+                  />
+                </span>
+                Topics board
+              </p>
+              <p className="font-normal text-gray-700 group-hover:underline group-focus:underline">
+                Browse all topics
+              </p>
+            </a>
+          </Link>
         </nav>
       </main>
     </>
