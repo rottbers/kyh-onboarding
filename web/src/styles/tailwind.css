@@ -18,7 +18,7 @@
 }
 
 @layer utilities {
-  @variants hover, focus {
+  @variants hover, focus, group-hover, group-focus {
     .underline {
       text-decoration: underline;
       text-decoration-thickness: 0.125rem;
