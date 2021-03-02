@@ -12,5 +12,25 @@ export default {
       type: 'string',
       validation: (Rule) => [Rule.required().min(1).error('Title is required')],
     },
+    {
+      name: 'location',
+      title: 'Location',
+      type: 'reference',
+      to: { type: 'location' },
+      validation: (Rule) => [Rule.required()],
+    },
   ],
+  preview: {
+    select: {
+      title: 'title',
+      location: 'location.title',
+    },
+    prepare: (selection) => {
+      const { title, location } = selection;
+      return {
+        title,
+        subtitle: location ? location : 'No assigned location',
+      };
+    },
+  },
 };
