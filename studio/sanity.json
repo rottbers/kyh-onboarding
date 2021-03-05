@@ -1,7 +1,8 @@
 {
   "root": true,
   "project": {
-    "name": "kyh-onboarding"
+    "name": "kyh-onboarding",
+    "basePath": "/studio"
   },
   "api": {
     "projectId": "oo5ws9d6",

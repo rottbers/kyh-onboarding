@@ -3,6 +3,7 @@ import Head from 'next/head';
 import router from 'next/router';
 
 import Logo from '../components/Logo';
+import Spinner from '../components/Spinner';
 
 import { useFirebase } from '../contexts/Firebase';
 import sanityClient from '../utils/sanityClient';
@@ -39,7 +40,7 @@ export default function SetupPage({ locations }) {
     }
   }
 
-  if (!firebase && !user) return <Spinner />;
+  if (isLoading) return <Spinner fullscreen />;
 
   const isFirstVisit = !user?.locationId && !user?.programId;
 
@@ -55,22 +56,26 @@ export default function SetupPage({ locations }) {
         {isFirstVisit ? (
           <>
             <p className="mb-2">
-              Hey 👋! Hope you’re excited! We’re looking forward to have you at
-              KYH starting this semester.
+              Hey{' '}
+              <span role="img" aria-label="wave emoji">
+                👋
+              </span>
+              ! Hope you’re excited! We’re looking forward to have you at KYH
+              starting this semester.
             </p>
             <p className="mb-2">
               We know you may have questions so we created this website to
               hopefully answer some of them.
             </p>
             <p className="mb-2">
-              Now that you're signed in, select your location and program to
-              start onboarding.
+              Now that you&apos;re signed in, select your location and program
+              to start onboarding.
             </p>
           </>
         ) : (
           <p className="mb-2">
-            Picked the wrong location or program? Don't worry, just update it
-            below.
+            Picked the wrong location or program? Don&apos;t worry, just update
+            it below.
           </p>
         )}
 
@@ -144,7 +149,10 @@ export default function SetupPage({ locations }) {
               className="mt-4 text-center text-brand-red font-normal"
               role="alert"
             >
-              ✋ {isError?.message || 'Something went wrong'}
+              <span role="img" aria-label="hand emoji">
+                ✋
+              </span>{' '}
+              {isError?.message || 'Something went wrong'}
             </p>
           )}
         </form>
@@ -155,15 +163,15 @@ export default function SetupPage({ locations }) {
 
 export async function getStaticProps() {
   const locations = await sanityClient.fetch(
-    `*[_type == "location"] {
+    `*[_type == "location" && !(_id in path('drafts.**'))] {
       _id,
       title,
-      "programs": programs[]-> {
+      "programs": *[_type == "program" && location._ref == ^._id && !(_id in path('drafts.**'))] {
         _id,
         title,
       }
     }`
   );
 
-  return { props: { locations } };
+  return { props: { locations }, revalidate: 30 };
 }

@@ -10,7 +10,7 @@ import sanityClient from '../utils/sanityClient';
 export default function TopicsPage({ allTopics }) {
   const { user } = useFirebase();
 
-  const topics = allTopics; // TODO: filter topics based on users location & program
+  const topics = allTopics.filter((topic) => topic?.programs?.includes(user?.programId)); // prettier-ignore
   const unreadTopics = topics.filter((topic) => !user?.readTopics?.includes(topic._id)); // prettier-ignore
   const readTopics = topics.filter((topic) => user?.readTopics?.includes(topic._id)); // prettier-ignore
 
@@ -21,19 +21,28 @@ export default function TopicsPage({ allTopics }) {
       </Head>
       <Header isDarkBackground={false} />
       <main className="p-4 container mx-auto">
-        <h1 className="text-3xl sm:text-4xl mb-4">Topics board</h1>
+        <h1 className="sr-only">Topics board</h1>
         <TopicsProgress
           readTopics={readTopics.length}
           totalTopics={topics.length}
         />
+        {!topics.length && (
+          <>
+            <h2 className="text-2xl mt-8 sm:mt-12 mb-2">Topics</h2>
+            <p>
+              Sorry... no topics found{' '}
+              <span role="img" aria-label="see no evil emoji">
+                🙈
+              </span>
+            </p>
+          </>
+        )}
         {unreadTopics.length > 0 && (
           <>
-            <h2 className="text-2xl mt-8 sm:mt-12 mb-2">Unread topics</h2>
-            {allTopics ? (
-              <TopicsGrid topics={unreadTopics} isRead={false} />
-            ) : (
-              <p>Hmmm... no topics found 🙈</p>
-            )}
+            <h2 className="text-2xl mt-8 sm:mt-12 mb-2">
+              {readTopics.length ? 'Unread topics' : 'Topics'}
+            </h2>
+            <TopicsGrid topics={unreadTopics} isRead={false} />
           </>
         )}
         {readTopics.length > 0 && (
@@ -49,12 +58,13 @@ export default function TopicsPage({ allTopics }) {
 
 export async function getStaticProps() {
   const allTopics = await sanityClient.fetch(
-    `*[_type == "topic"] {
+    `*[_type == "topic" && !(_id in path('drafts.**'))] {
       _id,
       title,
       "image": image.asset->.url,
+      "programs": programs[]->._id,
     }`
   );
 
-  return { props: { allTopics } };
+  return { props: { allTopics }, revalidate: 30 };
 }

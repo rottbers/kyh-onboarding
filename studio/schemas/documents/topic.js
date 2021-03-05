@@ -1,7 +1,5 @@
 import { MdDashboard } from 'react-icons/md';
 
-// TODO: figure out input and data structure for assigning locations & programs
-// this is required to filter relevant topics to the user client side
 export default {
   name: 'topic',
   title: 'Topic',
@@ -57,13 +55,9 @@ export default {
             ],
           },
         },
-        { type: 'image' },
+        { type: 'figure' },
+        { type: 'youtube' },
       ],
-    },
-    {
-      name: 'image',
-      title: 'Cover image',
-      type: 'image',
     },
     {
       name: 'questions',
@@ -121,12 +115,60 @@ export default {
                     ],
                   },
                 },
-                { type: 'image' },
+                { type: 'figure' },
+                { type: 'youtube' },
               ],
             },
           ],
         },
       ],
     },
+    {
+      name: 'image',
+      title: 'Cover image',
+      type: 'image',
+    },
+    {
+      name: 'programs',
+      title: 'Programs',
+      description: 'Assign the programs relevant for this topic',
+      type: 'array',
+      of: [{ type: 'reference', to: { type: 'program' } }],
+      validation: (Rule) => [
+        Rule.required().min(1).error('Assign a program'),
+        Rule.unique().error('Program already assigned'),
+      ],
+    },
   ],
+  preview: {
+    select: {
+      title: 'title',
+      image: 'image',
+      programsCount: 'programs.length',
+      program0: 'programs.0.title',
+      program1: 'programs.1.title',
+      program2: 'programs.2.title',
+    },
+    prepare: (selection) => {
+      const {
+        title,
+        image,
+        programsCount,
+        program0,
+        program1,
+        program2,
+      } = selection;
+
+      const programs = [program0, program1, program2].filter(Boolean);
+      const subtitle = programsCount
+        ? `(${programsCount}) ${programs.join(', ')}`
+        : 'No assigned programs';
+
+      return {
+        title,
+        subtitle: programsCount > programs.length ? `${subtitle}...` : subtitle,
+        media: image,
+      };
+    },
+  },
 };

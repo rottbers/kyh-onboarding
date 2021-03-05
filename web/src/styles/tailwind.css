@@ -17,34 +17,78 @@
   }
 }
 
-@layer components {
+@layer utilities {
+  @variants hover, focus, group-hover, group-focus {
+    .underline {
+      text-decoration: underline;
+      text-decoration-thickness: 0.125rem;
+    }
+
+    .underline-brand {
+      text-decoration-color: #ff6205;
+    }
+
+    .underline-brand-blue {
+      text-decoration-color: blue;
+    }
+  }
+
   .topic-content h2 {
-    @apply text-2xl mt-8 mb-1;
+    @apply md:text-3xl text-2xl mt-12 mb-2;
   }
 
   .topic-content h3 {
-    @apply text-lg mt-4 mb-1;
+    @apply text-xl mt-4 mb-2;
+  }
+
+  .topic-content h4 {
+    @apply text-lg mt-4 mb-2;
+  }
+
+  .topic-content p {
+    @apply mb-4 text-gray-700;
   }
 
   .topic-content ul,
   .topic-content ol {
-    @apply ml-4 my-4 pl-4;
+    @apply mb-4 ml-4 pl-4 text-gray-700;
   }
 
-  .topic-content p {
-    @apply mb-4 md:text-lg;
+  .topic-content ul {
+    @apply list-disc;
+  }
+
+  .topic-content ol {
+    @apply list-decimal;
+  }
+
+  .topic-content li {
+    @apply mb-4;
   }
 
   .topic-content a {
-    @apply text-brand-blue;
+    @apply underline underline-brand-blue;
   }
 
   .topic-content a:hover,
-  .topic-content a:focus {
-    @apply underline;
+  .topic-content a:focus,
+  .topic-content a:active {
+    @apply underline-brand;
   }
 
   .topic-content figure {
-    @apply mb-4;
+    @apply mb-4 shadow-sm;
+  }
+
+  .topic-content figure > figcaption {
+    @apply p-4 rounded-b text-center text-sm text-gray-700;
+  }
+
+  .topic-content blockquote {
+    @apply mb-4 p-4 border-l-2 border-brand;
+  }
+
+  .topic-content code {
+    @apply font-mono;
   }
 }

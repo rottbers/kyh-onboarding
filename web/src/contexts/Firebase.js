@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useReducer } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
@@ -18,66 +18,55 @@ if (!firebase.apps.length) firebase.initializeApp(config);
 
 const FirebaseContext = createContext(null);
 
-function reducer(state, action) {
-  switch (action.type) {
-    case 'LOADING':
-      return { ...state, status: 'loading', error: null };
-    case 'ERROR':
-      return { ...state, status: 'error', error: action.payload };
-    case 'UNAUTHENTICATED':
-      return { ...state, status: 'unauthenticated', user: null };
-    case 'AUTHENTICATED': {
-      const { uid, email, displayName, photoURL } = action.payload;
-      return {
-        ...state,
-        status: 'authenticated',
-        user: { uid, email, displayName, photoURL },
-      };
-    }
-    case 'SUBSCRIBED':
-      return {
-        ...state,
-        status: 'subscribed',
-        user: { ...state.user, ...action.payload },
-      };
-    default:
-      return state;
-  }
-}
-
-const initialState = { status: 'loading', user: null, error: null };
-
 export const FirebaseProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [userAuth, setUserAuth] = useState(null);
+  const [userStore, setUserStore] = useState(null);
+  const [status, setStatus] = useState('loading'); // 'loading' | 'error' | 'unauthenticated' | 'authenticated' | 'subscribed'
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const unsubscribe = firebase.auth().onAuthStateChanged(
-      (user) =>
-        user
-          ? dispatch({ type: 'AUTHENTICATED', payload: user })
-          : dispatch({ type: 'UNAUTHENTICATED' }),
-      (error) => dispatch({ type: 'ERROR', payload: error })
+      (user) => {
+        setUserAuth(user ? user : null);
+        setStatus(user ? 'authenticated' : 'unauthenticated');
+      },
+      (error) => {
+        setError(error);
+        setStatus('error');
+      }
     );
 
     return () => unsubscribe();
-  }, [firebase]);
+  }, []);
 
   useEffect(() => {
-    if (state.status !== 'authenticated') return;
+    if (!userAuth) return;
 
     const unsubscribe = firebase
       .firestore()
-      .doc(`users/${state.user.uid}`)
+      .doc(`users/${userAuth.uid}`)
       .onSnapshot(
-        (doc) => dispatch({ type: 'SUBSCRIBED', payload: doc.data() }),
-        (error) => dispatch({ type: 'ERROR', payload: error })
+        (doc) => {
+          setUserStore(doc.data());
+          setStatus('subscribed');
+        },
+        (error) => {
+          setError(error);
+          setStatus('error');
+        }
       );
 
     return () => unsubscribe();
-  }, [firebase, state]);
+  }, [userAuth]);
+
+  const user = (() => {
+    if (!userAuth) return null;
+    const { uid, email, displayName, photoURL } = userAuth;
+    return { uid, email, displayName, photoURL, ...userStore };
+  })();
 
   return (
-    <FirebaseContext.Provider value={{ firebase, ...state }}>
+    <FirebaseContext.Provider value={{ firebase, user, status, error }}>
       {children}
     </FirebaseContext.Provider>
   );
@@ -92,7 +81,7 @@ export const FirebaseAuthorization = ({ children }) => {
     case 'loading':
       return <Spinner fullscreen />;
     case 'error':
-      return <p>Error 😔</p>; // TODO: deal with error state
+      return <p>Error...</p>; // TODO: deal with error state
     case 'unauthenticated': {
       if (router.pathname !== '/signin') {
         router.push('/signin');

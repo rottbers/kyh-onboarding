@@ -1,20 +1,26 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
-import BlockContent from '@sanity/block-content-to-react';
+import ErrorPage from 'next/error';
 import { MdDashboard, MdArrowForward } from 'react-icons/md';
 
+import Spinner from '../../components/Spinner';
 import Header from '../../components/Header';
-import TopicQuestion from '../../components/TopicQuestion';
+import TopicBlockContent from '../../components/TopicBlockContent';
+import TopicQuestions from '../../components/TopicQuestions';
 
 import { useFirebase } from '../../contexts/Firebase';
 import sanityClient from '../../utils/sanityClient';
 
-export default function TopicPage({ topic }) {
+export default function TopicPage({ topic, allTopics }) {
   const { firebase, user } = useFirebase();
+  const { isFallback, asPath } = useRouter();
+
+  const isNotFound = !topic || (typeof topic === 'object' && !Object.keys(topic).length); // prettier-ignore
 
   useEffect(() => {
-    if (!user || !firebase) return;
+    if (!user || !firebase || isNotFound) return;
 
     firebase
       .firestore()
@@ -22,7 +28,23 @@ export default function TopicPage({ topic }) {
       .update({
         readTopics: firebase.firestore.FieldValue.arrayUnion(topic._id),
       });
-  }, [user, firebase]);
+  }, [firebase, user, isNotFound, topic]);
+
+  const headingRef = useRef();
+
+  // To prevent the link for the next topic to remain focused
+  // we reset focus to the topic heading when the URL changes.
+  useEffect(() => {
+    if (!isNotFound || !isFallback) headingRef.current.focus();
+  }, [isNotFound, isFallback, asPath]);
+
+  if (isFallback) return <Spinner fullscreen />;
+
+  if (isNotFound) return <ErrorPage statusCode={404} />;
+
+  const topics = allTopics.filter((topic) => topic?.programs?.includes(user?.programId)); // prettier-ignore
+  const readTopics = topics.filter((topic) => user?.readTopics?.includes(topic._id)); // prettier-ignore
+  const nextTopic = topics.filter((topic) => !user?.readTopics?.includes(topic._id))[0]; // prettier-ignore
 
   const { title, body, image, questions } = topic;
 
@@ -38,49 +60,57 @@ export default function TopicPage({ topic }) {
             style={image && { backgroundImage: `url(${image})` }}
             className="bg-center bg-cover bg-gray-900 -mx-4 px-4 -mt-24 pt-32 pb-16 text-white"
           >
-            <h1 className="max-w-2xl mx-auto mt-12 sm:my-12 2xl:my-24 text-4xl sm:text-5xl md:text-6xl lg:text-7xl ">
+            <h1
+              className="max-w-2xl mx-auto mt-12 sm:my-12 2xl:my-24 text-4xl sm:text-5xl md:text-6xl lg:text-7xl focus:outline-none"
+              tabIndex="-1"
+              ref={headingRef}
+            >
               {title}
             </h1>
           </header>
-          <div className="topic-content max-w-2xl mx-auto my-6">
-            <BlockContent blocks={body} />
-            {questions && (
-              <>
-                <h2>Frequently asked questions</h2>
-                {questions.map(({ _key, question, answer }) => (
-                  <TopicQuestion
-                    key={_key}
-                    questionHeading={question}
-                    answerBody={answer}
-                  />
-                ))}
-              </>
-            )}
+          <div className="max-w-2xl mx-auto my-8">
+            <TopicBlockContent blocks={body} />
+            <TopicQuestions questions={questions} />
           </div>
         </article>
-        <nav className="max-w-2xl mx-auto flex flex-row-reverse justify-between border-t border-gray-200 pt-4">
-          <div className="text-right w-1/2">
-            <p>
-              <span className="text-gray-600 inline-flex items-center">
-                Next topic <MdArrowForward className="inline-block ml-1" />
-              </span>
-            </p>
-            {/* TODO: make dynamic based on users unread topics */}
-            <Link href="/topic/8f1f15f4-4a15-4338-a1a4-83878e3df9b7">
-              <a className="font-normal underline">The Stockholm facilities</a>
+        <nav className="max-w-2xl mx-auto border-t border-gray-200 pt-8 pb-24 flex flex-col sm:flex-row-reverse justify-between">
+          {nextTopic ? (
+            <Link href={`/topic/${nextTopic._id}`}>
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+              <a className="group text-right w-full p-4 mb-4 sm:mb-0 rounded border border-gray-200 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none">
+                <p className="text-gray-500 text-sm flex flex-row items-center justify-end">
+                  {`Next topic (${readTopics?.length + 1} / ${topics?.length})`}
+                  <MdArrowForward
+                    aria-hidden={true}
+                    className="ml-1 text-brand"
+                  />
+                </p>
+                <p className="font-normal text-gray-700 group-hover:underline group-hover:underline-brand group-focus:underline group-focus:underline-brand">
+                  {nextTopic.title}
+                </p>
+              </a>
             </Link>
-          </div>
-          <div className="w-1/2">
-            <p>
-              <span className="text-gray-600 inline-flex items-center">
-                <MdDashboard className="inline-block mr-1" />
+          ) : (
+            <div className="sm:w-full sm:p4" />
+          )}
+          <Link href="/">
+            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+            <a className="group w-full p-4 sm:mr-4 rounded border border-gray-200 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none">
+              <p className="text-gray-500 text-sm flex flex-row items-center justify-start">
+                <span>
+                  {' '}
+                  <MdDashboard
+                    aria-hidden={true}
+                    className="mr-1 text-gray-400"
+                  />
+                </span>
                 Topics board
-              </span>
-            </p>
-            <Link href="/">
-              <a className="font-normal underline">Browse all topics</a>
-            </Link>
-          </div>
+              </p>
+              <p className="font-normal text-gray-700 group-hover:underline group-focus:underline">
+                Browse all topics
+              </p>
+            </a>
+          </Link>
         </nav>
       </main>
     </>
@@ -89,32 +119,40 @@ export default function TopicPage({ topic }) {
 
 export async function getStaticPaths() {
   const topics = await sanityClient.fetch(
-    `*[_type == "topic"] {
+    `*[_type == "topic" && !(_id in path('drafts.**'))] {
       _id
     }`
   );
 
   const paths = topics.map((topic) => ({ params: { topicId: topic._id } }));
 
-  return { paths, fallback: false };
+  return { paths, fallback: true };
 }
 
 export async function getStaticProps({ params }) {
-  const topic = await sanityClient.fetch(
-    `*[_type == "topic" && _id == "${params.topicId}"][0] {
-      _id,
-      "image": image.asset->.url,
-      title,
-      body[] {
-        ...,
-        asset-> {
+  const { topic, allTopics } = await sanityClient.fetch(`
+    {
+      "topic": *[_type == "topic" && _id == "${params.topicId}" && !(_id in path('drafts.**'))][0] {
+        _id,
+        "image": image.asset->.url,
+        title,
+        body[] {
           ...,
-          "_key": _id
+          image {
+            ...,
+            asset-> {
+            ...,
+            }
+          },
         },
+        questions,
       },
-      questions,
-  }`
-  );
+      "allTopics": *[_type == "topic" && !(_id in path('drafts.**'))] {
+        _id,
+        title,
+        "programs": programs[]->._id,
+      }
+    }`);
 
-  return { props: { topic } };
+  return { props: { topic, allTopics }, revalidate: 30 };
 }
