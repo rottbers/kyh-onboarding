@@ -7,12 +7,15 @@ import TopicsGrid from '../components/TopicsGrid';
 import { useFirebase } from '../contexts/Firebase';
 import sanityClient from '../utils/sanityClient';
 
-export default function TopicsPage({ allTopics }) {
+export default function TopicsPage({ allTopics, allPrograms, allLocations }) {
   const { user } = useFirebase();
 
   const topics = allTopics.filter((topic) => topic?.programs?.includes(user?.programId)); // prettier-ignore
   const unreadTopics = topics.filter((topic) => !user?.readTopics?.includes(topic._id)); // prettier-ignore
   const readTopics = topics.filter((topic) => user?.readTopics?.includes(topic._id)); // prettier-ignore
+
+  const program = allPrograms.filter(({ _id }) => user?.programId === _id)[0]; // prettier-ignore
+  const location = allLocations.filter(({ _id }) => user?.locationId === _id)[0]; // prettier-ignore
 
   return (
     <>
@@ -25,6 +28,9 @@ export default function TopicsPage({ allTopics }) {
         <TopicsProgress
           readTopics={readTopics.length}
           totalTopics={topics.length}
+          programEmail={program?.email}
+          programTitle={program?.title}
+          locationTitle={location?.title}
         />
         {!topics.length && (
           <>
@@ -57,14 +63,25 @@ export default function TopicsPage({ allTopics }) {
 }
 
 export async function getStaticProps() {
-  const allTopics = await sanityClient.fetch(
-    `*[_type == "topic" && !(_id in path('drafts.**'))] {
-      _id,
-      title,
-      "image": image.asset->.url,
-      "programs": programs[]->._id,
+  const { allTopics, allLocations, allPrograms } = await sanityClient.fetch(
+    `{
+      "allTopics": *[_type == "topic" && !(_id in path('drafts.**'))] {
+        _id,
+        title,
+        "image": image.asset->.url,
+        "programs": programs[]->._id,
+      },
+      "allLocations": *[_type == "location" && !(_id in path('drafts.**'))] {
+        _id,
+        title,
+      },
+      "allPrograms": *[_type == "program" && !(_id in path('drafts.**'))] {
+        _id,
+        title,
+        email,
+      }
     }`
   );
 
-  return { props: { allTopics }, revalidate: 30 };
+  return { props: { allTopics, allLocations, allPrograms }, revalidate: 30 };
 }
