@@ -65,7 +65,8 @@ export default function SignInPage() {
       </Head>
       <main className="w-full min-h-screen flex flex-col sm:items-center md:justify-center p-4">
         <h1 className="text-3xl sm:text-4xl text-center mb-8">
-          <Logo className="inline-block h-8 sm:h-10" /> | Onboarding
+          <Logo className="inline-block h-8 sm:h-10" aria-label="KYH" /> |
+          Onboarding
         </h1>
         <p className="text-center">
           Onboarding requires a <b>@student.kyh.se</b> Google account provided

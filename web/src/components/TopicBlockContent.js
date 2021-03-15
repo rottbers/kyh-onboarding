@@ -11,10 +11,8 @@ const TopicBlockContent = ({ blocks }) => {
         return (
           <figure>
             <div
-              style={{
-                backgroundSize: 'cover',
-                backgroundImage: `url(${image.asset.metadata.lqip})`,
-              }}
+              className="bg-cover"
+              style={{ backgroundImage: `url(${image.asset.metadata.lqip})` }}
             >
               <Image
                 src={image.asset.url}
@@ -34,9 +32,8 @@ const TopicBlockContent = ({ blocks }) => {
         const id = getYouTubeId(url);
         return (
           <figure>
-            <div style={{ position: 'relative', paddingBottom: '56.25%' }}>
+            <div className="aspect-w-16 aspect-h-9">
               <iframe
-                style={{ position: 'absolute', width: '100%', height: '100%' }}
                 title="YouTube embed"
                 src={`https://www.youtube-nocookie.com/embed/${id}?rel=0`}
                 frameBorder="0"
