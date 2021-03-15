@@ -9,7 +9,7 @@ module.exports = {
       transparent: 'transparent',
       current: 'currentColor',
       brand: { DEFAULT: '#ff6205', 'opacity-70': 'rgba(255,98,5,.7)' },
-      'brand-blue': { DEFAULT: '#0000ff' },
+      'brand-blue': { DEFAULT: '#0000ff', 'opacity-70': 'rgba(0,0,255,.7)' },
       'brand-red': { DEFAULT: '#ff0000', 'opacity-70': 'rgba(255,23,48,.7)' },
       'brand-green': { DEFAULT: '#00df62' },
     },
@@ -29,5 +29,8 @@ module.exports = {
       borderWidth: ['hover', 'focus'],
     },
   },
-  plugins: [require('@tailwindcss/forms')],
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/aspect-ratio'),
+  ],
 };

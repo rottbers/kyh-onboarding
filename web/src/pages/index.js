@@ -68,7 +68,12 @@ export async function getStaticProps() {
       "allTopics": *[_type == "topic" && !(_id in path('drafts.**'))] {
         _id,
         title,
-        "image": image.asset->.url,
+        "image": image.asset-> {
+          url,
+          metadata {
+            lqip
+          },
+        },
         "programs": programs[]->._id,
       },
       "allLocations": *[_type == "location" && !(_id in path('drafts.**'))] {

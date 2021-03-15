@@ -9,7 +9,7 @@ const TopicsProgress = ({
     <>
       {readTopics === 0 && (
         <p className="font-normal my-2">
-          Below you&apos;ll find various topics with practical about the{' '}
+          Below you&apos;ll find various topics with information about the{' '}
           <span className="font-semibold">{programTitle}</span> program
           you&apos;ll be studying in{' '}
           <span className="font-semibold">{locationTitle}</span>. We suggest you
@@ -41,7 +41,7 @@ const TopicsProgress = ({
             👏
           </span>{' '}
           You&apos;re done with onboarding and now the classroom awaits! The
-          topics will remain available so you can always come back and revist
+          topics will remain available so you can always come back and revisit
           the information later. In case you still have questions then
           you&apos;re welcome to to get in contact with your program lead via{' '}
           <a
