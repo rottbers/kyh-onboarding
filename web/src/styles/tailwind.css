@@ -24,11 +24,11 @@
       text-decoration-thickness: 0.125rem;
     }
 
-    .underline-brand {
+    .underline-orange {
       text-decoration-color: #ff6205;
     }
 
-    .underline-brand-blue {
+    .underline-blue {
       text-decoration-color: blue;
     }
   }
@@ -71,13 +71,13 @@
   }
 
   .topic-content a {
-    @apply underline underline-brand-blue;
+    @apply underline underline-blue;
   }
 
   .topic-content a:hover,
   .topic-content a:focus,
   .topic-content a:active {
-    @apply underline-brand;
+    @apply underline-orange;
   }
 
   .topic-content figure {
@@ -89,7 +89,7 @@
   }
 
   .topic-content blockquote {
-    @apply mb-4 p-4 border-l-2 border-brand;
+    @apply mb-4 p-4 border-l-2 border-orange;
   }
 
   .topic-content code {

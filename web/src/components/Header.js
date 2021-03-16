@@ -16,7 +16,7 @@ const Header = ({ isDarkBackground }) => {
     >
       <nav className={`text-xl text-center font-mono fill-current z-50`}>
         <a
-          className="border-b-2 border-transparent hover:border-brand focus:border-brand focus:outline-none"
+          className="border-b-2 border-transparent hover:border-orange focus:border-orange focus:outline-none"
           href="https://kyh.se"
         >
           <Logo aria-label="KYH" className="inline-block h-6" />
@@ -24,7 +24,7 @@ const Header = ({ isDarkBackground }) => {
         |{' '}
         <Link href="/">
           {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-          <a className="border-b-2 border-transparent hover:border-brand focus:border-brand focus:outline-none">
+          <a className="border-b-2 border-transparent hover:border-orange focus:border-orange focus:outline-none">
             Onboarding
           </a>
         </Link>
@@ -32,7 +32,7 @@ const Header = ({ isDarkBackground }) => {
       {/* TODO: a11y! */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="text-4xl z-50 focus:outline-none border-b-2 border-transparent focus:border-brand hover:border-brand"
+        className="text-4xl z-50 focus:outline-none border-b-2 border-transparent focus:border-orange hover:border-orange"
       >
         {isOpen ? <MdClose /> : <MdMenu />}
       </button>
@@ -50,12 +50,12 @@ const Header = ({ isDarkBackground }) => {
         <p className="mb-8 text-gray-700">{user?.email}</p>
         <Link href="/setup">
           {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-          <a className="mb-8 font-normal text-xl focus:outline-none focus:underline focus:underline-brand hover:underline hover:underline-brand">
+          <a className="mb-8 font-normal text-xl focus:outline-none focus:underline focus:underline-orange hover:underline hover:underline-orange">
             Change location or program
           </a>
         </Link>
         <button
-          className="font-normal text-xl focus:outline-none focus:underline focus:underline-brand hover:underline hover:underline-brand"
+          className="font-normal text-xl focus:outline-none focus:underline focus:underline-orange hover:underline hover:underline-orange"
           onClick={() => firebase.auth().signOut()}
         >
           Sign out

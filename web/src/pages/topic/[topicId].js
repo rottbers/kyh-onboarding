@@ -71,7 +71,7 @@ export default function TopicPage({ topic, allTopics }) {
                     backgroundImage: `url(${image?.url}?auto=format&max-w=1920&sat=-100&q=75)`,
                   }}
                 />
-                <div className="absolute z-20 left-0 top-0 h-full w-full bg-gray-900 opacity-70 bg-gradient-to-br from-brand-blue-opacity-70 to-brand-opacity-70" />
+                <div className="absolute z-20 left-0 top-0 h-full w-full bg-gray-900 opacity-70 bg-gradient-to-br from-blue-opacity-70 to-orange-opacity-70" />
               </>
             )}
             <h1
@@ -96,7 +96,7 @@ export default function TopicPage({ topic, allTopics }) {
                   {`Next topic (${readTopics?.length + 1} / ${topics?.length})`}
                   <MdArrowForward
                     aria-hidden={true}
-                    className="ml-1 text-brand"
+                    className="ml-1 text-orange"
                   />
                 </p>
                 <p className="font-normal text-gray-700">{nextTopic.title}</p>

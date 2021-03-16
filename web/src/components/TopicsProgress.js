@@ -45,7 +45,7 @@ const TopicsProgress = ({
           the information later. In case you still have questions then
           you&apos;re welcome to to get in contact with your program lead via{' '}
           <a
-            className="font-semibold focus:outline-none hover:underline focus:underline hover:underline-brand focus:underline-brand"
+            className="font-semibold focus:outline-none hover:underline focus:underline hover:underline-orange focus:underline-orange"
             href={`mailto:${programEmail}`}
           >
             {programEmail}

@@ -79,7 +79,7 @@ export default function SignInPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="flex justify-center items-center w-full mt-4 py-3 font-semibold bg-brand text-white border border-brand disabled:border-gray-400 disabled:bg-transparent disabled:text-gray-400 disabled:cursor-default rounded-sm focus:outline-none focus:ring"
+            className="flex justify-center items-center w-full mt-4 py-3 font-semibold bg-orange text-white border border-orange disabled:border-gray-400 disabled:bg-transparent disabled:text-gray-400 disabled:cursor-default rounded-sm focus:outline-none focus:ring"
           >
             <span className="not-sr-only mr-1">
               <FaGoogle />
@@ -87,10 +87,7 @@ export default function SignInPage() {
             Sign in with Google
           </button>
           {isError && (
-            <p
-              className="mt-4 text-center text-brand-red font-normal"
-              role="alert"
-            >
+            <p className="mt-4 text-center text-red font-normal" role="alert">
               <span role="img" aria-label="hand emoji">
                 ✋
               </span>{' '}

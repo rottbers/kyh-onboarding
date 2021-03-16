@@ -2,16 +2,17 @@ const colors = require('tailwindcss/colors');
 
 module.exports = {
   purge: ['./src/pages/**/*.js', './src/components/**/*.js'],
-  darkMode: 'media',
+  darkMode: false,
   theme: {
     colors: {
-      ...colors,
-      transparent: 'transparent',
       current: 'currentColor',
-      brand: { DEFAULT: '#ff6205', 'opacity-70': 'rgba(255,98,5,.7)' },
-      'brand-blue': { DEFAULT: '#0000ff', 'opacity-70': 'rgba(0,0,255,.7)' },
-      'brand-red': { DEFAULT: '#ff0000', 'opacity-70': 'rgba(255,23,48,.7)' },
-      'brand-green': { DEFAULT: '#00df62' },
+      transparent: 'transparent',
+      white: 'white',
+      gray: colors.gray,
+      orange: { DEFAULT: '#ff6205', 'opacity-70': 'rgba(255,98,5,.7)' },
+      blue: { DEFAULT: '#0000ff', 'opacity-70': 'rgba(0,0,255,.7)' },
+      red: { DEFAULT: '#ff0000', 'opacity-70': 'rgba(255,23,48,.7)' },
+      green: { DEFAULT: '#00df62' },
     },
     extend: {
       fontFamily: {
@@ -24,9 +25,8 @@ module.exports = {
     extend: {
       cursor: ['disabled', 'hover'],
       backgroundColor: ['disabled'],
-      textColor: ['disabled', 'hover'],
+      textColor: ['disabled'],
       borderColor: ['disabled'],
-      borderWidth: ['hover', 'focus'],
     },
   },
   plugins: [
