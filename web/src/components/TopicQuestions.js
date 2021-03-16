@@ -15,7 +15,7 @@ const TopicQuestion = ({ question, answer, id }) => {
           aria-controls={`question-body-${id}`}
           id={`question-heading-${id}`}
         >
-          <span aria-hidden={true} className="mr-4 text-brand-blue">
+          <span aria-hidden={true} className="mr-4 text-blue">
             {isOpen ? <FaMinus /> : <FaPlus />}
           </span>
           <span className="text-lg">{question}</span>
