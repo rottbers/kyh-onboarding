@@ -13,7 +13,7 @@ import TopicQuestions from '../../components/TopicQuestions';
 import { useFirebase } from '../../contexts/Firebase';
 import sanityClient from '../../utils/sanityClient';
 
-export default function TopicPage({ topic, allTopics }) {
+export default function TopicPage({ topic, allTopics, allPrograms }) {
   const { firebase, user } = useFirebase();
   const { isFallback, asPath } = useRouter();
 
@@ -46,7 +46,9 @@ export default function TopicPage({ topic, allTopics }) {
   const readTopics = topics.filter((topic) => user?.readTopics?.includes(topic._id)); // prettier-ignore
   const nextTopic = topics.filter((topic) => !user?.readTopics?.includes(topic._id))[0]; // prettier-ignore
 
-  const { title, body, image, questions } = topic;
+  const program = allPrograms.filter(({ _id }) => user?.programId === _id)[0];
+
+  const { title, body, image, questions, options } = topic;
 
   return (
     <>
@@ -84,6 +86,38 @@ export default function TopicPage({ topic, allTopics }) {
           </header>
           <div className="max-w-2xl mx-auto my-8">
             <TopicBlockContent blocks={body} />
+            {options?.showCSN && (
+              <>
+                {program?.csn ? (
+                  <table className="w-full text-left text-sm sm:text-base">
+                    <thead>
+                      <tr>
+                        <th>Start date</th>
+                        <th>End date</th>
+                        <th>Weeks</th>
+                        <th>YH points</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>{program.csn?.firstSemester?.startDate}</td>
+                        <td>{program.csn?.firstSemester?.endDate}</td>
+                        <td>{program.csn?.firstSemester?.weeks}</td>
+                        <td>{program.csn?.firstSemester?.points}</td>
+                      </tr>
+                      <tr>
+                        <td>{program.csn?.secondSemester?.startDate}</td>
+                        <td>{program.csn?.secondSemester?.endDate}</td>
+                        <td>{program.csn?.secondSemester?.weeks}</td>
+                        <td>{program.csn?.secondSemester?.points}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                ) : (
+                  <p>Sorry, no applications dates found for your program.</p>
+                )}
+              </>
+            )}
             <TopicQuestions questions={questions} />
           </div>
         </article>
@@ -140,7 +174,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-  const { topic, allTopics } = await sanityClient.fetch(`
+  const { topic, allTopics, allPrograms } = await sanityClient.fetch(`
     {
       "topic": *[_type == "topic" && _id == "${params.topicId}" && !(_id in path('drafts.**'))][0] {
         _id,
@@ -160,14 +194,19 @@ export async function getStaticProps({ params }) {
             }
           },
         },
+        options,
         questions,
       },
       "allTopics": *[_type == "topic" && !(_id in path('drafts.**'))] {
         _id,
         title,
         "programs": programs[]->._id,
+      },
+      "allPrograms": *[_type == "program" && !(_id in path('drafts.**'))] {
+        _id,
+        csn,
       }
     }`);
 
-  return { props: { topic, allTopics }, revalidate: 30 };
+  return { props: { topic, allTopics, allPrograms }, revalidate: 30 };
 }

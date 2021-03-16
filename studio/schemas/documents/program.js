@@ -25,6 +25,85 @@ export default {
       type: 'email',
       validation: (Rule) => [Rule.required()],
     },
+    {
+      name: 'csn',
+      title: 'CSN application dates',
+      type: 'object',
+      fields: [
+        {
+          name: 'firstSemester',
+          title: 'First semester',
+          type: 'object',
+          fieldsets: [{ name: 'csn', options: { columns: 2 } }],
+          fields: [
+            {
+              name: 'startDate',
+              title: 'Start date',
+              type: 'date',
+              fieldset: 'csn',
+              validation: (Rule) => [Rule.required()],
+            },
+            {
+              name: 'endDate',
+              title: 'End date',
+              type: 'date',
+              fieldset: 'csn',
+              validation: (Rule) => [Rule.required()],
+            },
+            {
+              name: 'weeks',
+              title: 'Weeks',
+              type: 'number',
+              fieldset: 'csn',
+              validation: (Rule) => [Rule.required()],
+            },
+            {
+              name: 'points',
+              title: 'YH points',
+              type: 'number',
+              fieldset: 'csn',
+              validation: (Rule) => [Rule.required()],
+            },
+          ],
+        },
+        {
+          name: 'secondSemester',
+          title: 'Second semester',
+          type: 'object',
+          fieldsets: [{ name: 'csn', options: { columns: 2 } }],
+          fields: [
+            {
+              name: 'startDate',
+              title: 'Start date',
+              type: 'date',
+              fieldset: 'csn',
+              validation: (Rule) => [Rule.required()],
+            },
+            {
+              name: 'endDate',
+              title: 'End date',
+              type: 'date',
+              fieldset: 'csn',
+              validation: (Rule) => [Rule.required()],
+            },
+            {
+              name: 'weeks',
+              title: 'Weeks',
+              type: 'number',
+              fieldset: 'csn',
+              validation: (Rule) => [Rule.required()],
+            },
+            {
+              name: 'points',
+              title: 'YH points',
+              type: 'number',
+              fieldset: 'csn',
+              validation: (Rule) => [Rule.required()],
+            },
+          ],
+        },
+      ],
+    },
   ],
   preview: {
     select: {
