@@ -88,22 +88,28 @@ export default function TopicPage({ topic, allTopics }) {
           </div>
         </article>
         <nav className="max-w-2xl mx-auto border-t border-gray-200 pt-8 pb-24 flex flex-col sm:flex-row-reverse justify-between">
-          {nextTopic ? (
-            <Link href={`/topic/${nextTopic._id}`}>
+          {user?.completedOnboarding ? (
+            <div className="sm:w-full sm:p4" />
+          ) : (
+            <Link href={nextTopic ? `/topic/${nextTopic._id}` : '/'}>
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <a className="text-right w-full p-4 mb-4 sm:mb-0 rounded border border-gray-200 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none focus:ring">
                 <p className="text-gray-500 text-sm flex flex-row items-center justify-end">
-                  {`Next topic (${readTopics?.length + 1} / ${topics?.length})`}
+                  {nextTopic
+                    ? `Next topic (${readTopics?.length + 1} / ${
+                        topics?.length
+                      })`
+                    : 'Onboarding complete'}
                   <MdArrowForward
                     aria-hidden={true}
                     className="ml-1 text-orange"
                   />
                 </p>
-                <p className="font-normal text-gray-700">{nextTopic.title}</p>
+                <p className="font-normal text-gray-700">
+                  {nextTopic ? nextTopic.title : 'Read message 🎉'}
+                </p>
               </a>
             </Link>
-          ) : (
-            <div className="sm:w-full sm:p4" />
           )}
           <Link href="/">
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
