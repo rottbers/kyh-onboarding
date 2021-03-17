@@ -1,42 +1,66 @@
+import { useState } from 'react';
 import Link from 'next/link';
-import Logo from './Logo';
-
+import { MdMenu, MdClose } from 'react-icons/md';
 import { useFirebase } from '../contexts/Firebase';
+import Logo from './Logo';
 
 const Header = ({ isDarkBackground }) => {
   const { firebase, user } = useFirebase();
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header className="flex flex-row justify-between items-center p-4">
-      <nav
-        className={`text-xl text-center font-mono fill-current ${
-          isDarkBackground ? 'text-white' : 'text-gray-900'
-        }`}
-      >
+    <header
+      className={`flex flex-row justify-between items-center p-4 ${
+        isDarkBackground && !isOpen ? 'text-white' : 'text-gray-900'
+      }`}
+    >
+      <nav className={`text-xl text-center font-mono fill-current z-50`}>
         <a
-          className="border-brand hover:border-b-2 focus:border-b-2 focus:outline-none"
+          className="border-b-2 border-transparent hover:border-orange focus:border-orange focus:outline-none"
           href="https://kyh.se"
         >
-          <Logo className="inline-block h-6" />
+          <Logo aria-label="KYH" className="inline-block h-6" />
         </a>{' '}
         |{' '}
         <Link href="/">
           {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-          <a className="border-brand hover:border-b-2 focus:border-b-2 focus:outline-none">
+          <a className="border-b-2 border-transparent hover:border-orange focus:border-orange focus:outline-none">
             Onboarding
           </a>
         </Link>
       </nav>
-      {/* TODO: build user menu */}
+      {/* TODO: a11y! */}
       <button
-        onClick={() => firebase.auth().signOut()}
-        style={user?.photoURL && { backgroundImage: `url(${user.photoURL})` }}
-        className={`h-12 w-12 rounded-full border-2 bg-center bg-cover bg-gray-200 hover:border-brand focus:border-brand focus:outline-none ${
-          isDarkBackground ? 'border-white' : 'border-gray-900'
+        onClick={() => setIsOpen(!isOpen)}
+        className="text-4xl z-50 focus:outline-none border-b-2 border-transparent focus:border-orange hover:border-orange"
+      >
+        {isOpen ? <MdClose /> : <MdMenu />}
+      </button>
+      <div
+        className={`transition-opacity fixed left-0 top-0 z-40 min-h-full w-full bg-white py-12 px-4 flex flex-col items-center justify-center ${
+          isOpen ? 'opacity-100' : 'w-0 h-0 opacity-0 invisible'
         }`}
       >
-        <span className="sr-only">Sign out</span>
-      </button>
+        <img
+          src={user?.photoURL}
+          alt="avatar"
+          className="mb-4 h-16 w-16 md:h-32 md:w-32 rounded-full bg-center bg-cover bg-gray-200"
+        />
+        <p className="text-gray-700">{user?.displayName}</p>
+        <p className="mb-8 text-gray-700">{user?.email}</p>
+        <Link href="/setup">
+          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+          <a className="mb-8 font-normal text-xl focus:outline-none focus:underline focus:underline-orange hover:underline hover:underline-orange">
+            Change location or program
+          </a>
+        </Link>
+        <button
+          className="font-normal text-xl focus:outline-none focus:underline focus:underline-orange hover:underline hover:underline-orange"
+          onClick={() => firebase.auth().signOut()}
+        >
+          Sign out
+        </button>
+      </div>
     </header>
   );
 };

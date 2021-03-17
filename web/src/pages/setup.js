@@ -51,7 +51,8 @@ export default function SetupPage({ locations }) {
       </Head>
       <main className="w-full min-h-screen flex flex-col sm:items-center md:justify-center p-4">
         <h1 className="text-3xl sm:text-4xl text-center mb-8">
-          <Logo className="inline-block h-8 sm:h-10" /> | Onboarding
+          <Logo className="inline-block h-8 sm:h-10" aria-label="KYH" /> |
+          Onboarding
         </h1>
         {isFirstVisit ? (
           <>
@@ -84,7 +85,7 @@ export default function SetupPage({ locations }) {
             Location
           </label>
           <select
-            className="mb-4 rounded-sm bg-transparent cursor-pointer border-gray-900"
+            className="mb-4 rounded-sm bg-transparent cursor-pointer focus:ring focus:ring-blue-500 focus:ring-opacity-50"
             placeholder="Select location"
             name="location"
             id="location"
@@ -116,7 +117,7 @@ export default function SetupPage({ locations }) {
           </label>
           <select
             disabled={!locationId || availablePrograms.length < 1}
-            className="mb-4 rounded-sm bg-transparent cursor-pointer disabled:cursor-default disabled:text-gray-400 disabled:border-gray-400"
+            className="mb-4 rounded-sm bg-transparent cursor-pointer focus:ring focus:ring-blue-500 focus:ring-opacity-50 disabled:cursor-default disabled:text-gray-400 disabled:border-gray-400"
             placeholder="Select program"
             name="program"
             id="program"
@@ -140,15 +141,12 @@ export default function SetupPage({ locations }) {
           <button
             type="submit"
             disabled={!locationId || !programId || isLoading}
-            className="w-full mt-4 py-3 font-semibold bg-brand text-white border border-brand disabled:border-gray-400 disabled:bg-transparent disabled:text-gray-400 disabled:cursor-default rounded-sm focus:outline-none focus:ring"
+            className="w-full mt-4 py-3 font-semibold bg-orange text-white border border-orange disabled:border-gray-400 disabled:bg-transparent disabled:text-gray-400 disabled:cursor-default rounded-sm focus:outline-none focus:ring"
           >
             {isFirstVisit ? 'Start onboarding ✌️' : 'Update'}
           </button>
           {isError && (
-            <p
-              className="mt-4 text-center text-brand-red font-normal"
-              role="alert"
-            >
+            <p className="mt-4 text-center text-red font-normal" role="alert">
               <span role="img" aria-label="hand emoji">
                 ✋
               </span>{' '}

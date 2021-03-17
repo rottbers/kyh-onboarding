@@ -18,23 +18,27 @@
 }
 
 @layer utilities {
-  @variants hover, focus, group-hover, group-focus {
+  @variants hover, focus {
     .underline {
       text-decoration: underline;
       text-decoration-thickness: 0.125rem;
     }
 
-    .underline-brand {
+    .underline-orange {
       text-decoration-color: #ff6205;
     }
 
-    .underline-brand-blue {
+    .underline-blue {
       text-decoration-color: blue;
     }
   }
 
+  .topic-content {
+    @apply break-words;
+  }
+
   .topic-content h2 {
-    @apply md:text-3xl text-2xl mt-12 mb-2;
+    @apply text-2xl mt-12 mb-2;
   }
 
   .topic-content h3 {
@@ -67,13 +71,13 @@
   }
 
   .topic-content a {
-    @apply underline underline-brand-blue;
+    @apply underline underline-blue;
   }
 
   .topic-content a:hover,
   .topic-content a:focus,
   .topic-content a:active {
-    @apply underline-brand;
+    @apply underline-orange;
   }
 
   .topic-content figure {
@@ -85,7 +89,7 @@
   }
 
   .topic-content blockquote {
-    @apply mb-4 p-4 border-l-2 border-brand;
+    @apply mb-4 p-4 border-l-2 border-orange;
   }
 
   .topic-content code {

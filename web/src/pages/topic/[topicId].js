@@ -56,12 +56,26 @@ export default function TopicPage({ topic, allTopics }) {
       <Header isDarkBackground={true} />
       <main className="p-4">
         <article>
-          <header
-            style={image && { backgroundImage: `url(${image})` }}
-            className="bg-center bg-cover bg-gray-900 -mx-4 px-4 -mt-24 pt-32 pb-16 text-white"
-          >
+          <header className="relative -mx-4 px-4 -mt-24 pt-32 pb-16 bg-gray-900 text-white">
+            {image && (
+              <>
+                <div
+                  className="absolute left-0 top-0 h-full w-full bg-cover bg-center"
+                  style={{
+                    backgroundImage: `url(${image?.metadata?.lqip})`,
+                  }}
+                />
+                <div
+                  className="absolute z-10 left-0 top-0 h-full w-full bg-cover bg-center"
+                  style={{
+                    backgroundImage: `url(${image?.url}?auto=format&max-w=1920&sat=-100&q=75)`,
+                  }}
+                />
+                <div className="absolute z-20 left-0 top-0 h-full w-full bg-gray-900 opacity-70 bg-gradient-to-br from-blue-opacity-70 to-orange-opacity-70" />
+              </>
+            )}
             <h1
-              className="max-w-2xl mx-auto mt-12 sm:my-12 2xl:my-24 text-4xl sm:text-5xl md:text-6xl lg:text-7xl focus:outline-none"
+              className="relative z-30 max-w-2xl mx-auto mt-12 sm:my-12 2xl:my-24 text-4xl sm:text-5xl md:text-6xl lg:text-7xl focus:outline-none"
               tabIndex="-1"
               ref={headingRef}
             >
@@ -77,17 +91,15 @@ export default function TopicPage({ topic, allTopics }) {
           {nextTopic ? (
             <Link href={`/topic/${nextTopic._id}`}>
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <a className="group text-right w-full p-4 mb-4 sm:mb-0 rounded border border-gray-200 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none">
+              <a className="text-right w-full p-4 mb-4 sm:mb-0 rounded border border-gray-200 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none focus:ring">
                 <p className="text-gray-500 text-sm flex flex-row items-center justify-end">
                   {`Next topic (${readTopics?.length + 1} / ${topics?.length})`}
                   <MdArrowForward
                     aria-hidden={true}
-                    className="ml-1 text-brand"
+                    className="ml-1 text-orange"
                   />
                 </p>
-                <p className="font-normal text-gray-700 group-hover:underline group-hover:underline-brand group-focus:underline group-focus:underline-brand">
-                  {nextTopic.title}
-                </p>
+                <p className="font-normal text-gray-700">{nextTopic.title}</p>
               </a>
             </Link>
           ) : (
@@ -95,7 +107,7 @@ export default function TopicPage({ topic, allTopics }) {
           )}
           <Link href="/">
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-            <a className="group w-full p-4 sm:mr-4 rounded border border-gray-200 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none">
+            <a className="w-full p-4 sm:mr-4 rounded border border-gray-200 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none focus:ring">
               <p className="text-gray-500 text-sm flex flex-row items-center justify-start">
                 <span>
                   {' '}
@@ -106,9 +118,7 @@ export default function TopicPage({ topic, allTopics }) {
                 </span>
                 Topics board
               </p>
-              <p className="font-normal text-gray-700 group-hover:underline group-focus:underline">
-                Browse all topics
-              </p>
+              <p className="font-normal text-gray-700">Browse all topics</p>
             </a>
           </Link>
         </nav>
@@ -134,7 +144,12 @@ export async function getStaticProps({ params }) {
     {
       "topic": *[_type == "topic" && _id == "${params.topicId}" && !(_id in path('drafts.**'))][0] {
         _id,
-        "image": image.asset->.url,
+        "image": image.asset-> {
+          url,
+          metadata {
+            lqip
+          },
+        },
         title,
         body[] {
           ...,

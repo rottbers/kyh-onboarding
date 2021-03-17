@@ -65,7 +65,8 @@ export default function SignInPage() {
       </Head>
       <main className="w-full min-h-screen flex flex-col sm:items-center md:justify-center p-4">
         <h1 className="text-3xl sm:text-4xl text-center mb-8">
-          <Logo className="inline-block h-8 sm:h-10" /> | Onboarding
+          <Logo className="inline-block h-8 sm:h-10" aria-label="KYH" /> |
+          Onboarding
         </h1>
         <p className="text-center">
           Onboarding requires a <b>@student.kyh.se</b> Google account provided
@@ -78,7 +79,7 @@ export default function SignInPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="flex justify-center items-center w-full mt-4 py-3 font-semibold bg-brand text-white border border-brand disabled:border-gray-400 disabled:bg-transparent disabled:text-gray-400 disabled:cursor-default rounded-sm focus:outline-none focus:ring"
+            className="flex justify-center items-center w-full mt-4 py-3 font-semibold bg-orange text-white border border-orange disabled:border-gray-400 disabled:bg-transparent disabled:text-gray-400 disabled:cursor-default rounded-sm focus:outline-none focus:ring"
           >
             <span className="not-sr-only mr-1">
               <FaGoogle />
@@ -86,10 +87,7 @@ export default function SignInPage() {
             Sign in with Google
           </button>
           {isError && (
-            <p
-              className="mt-4 text-center text-brand-red font-normal"
-              role="alert"
-            >
+            <p className="mt-4 text-center text-red font-normal" role="alert">
               <span role="img" aria-label="hand emoji">
                 ✋
               </span>{' '}

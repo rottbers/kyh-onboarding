@@ -19,6 +19,12 @@ export default {
       to: { type: 'location' },
       validation: (Rule) => [Rule.required()],
     },
+    {
+      name: 'email',
+      title: 'Contact email',
+      type: 'email',
+      validation: (Rule) => [Rule.required()],
+    },
   ],
   preview: {
     select: {
