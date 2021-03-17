@@ -1,13 +1,14 @@
+import Logo from "./Logo";
+
 const Spinner = ({ fullscreen = false }) => {
   // TODO: replace paragraph with spinner
-  const Svg = () => <p role="status">Loading...</p>;
-
   return fullscreen ? (
-    <main className="h-screen flex items-center justify-center">
-      <Svg />
+    <main className="h-screen flex items-center justify-center flex-col">
+      <Logo className="w-32 h-32 animate-bounce" />
+      <p className="border-solid divide-y divide-black">LOADING</p>
     </main>
   ) : (
-    <Svg />
+    <Logo />
   );
 };
 
