@@ -31,7 +31,7 @@ export default function SetupPage({ locations }) {
       await firebase
         .firestore()
         .doc(`users/${user.uid}`)
-        .update({ locationId, programId });
+        .update({ locationId, programId, completedOnboarding: false });
 
       router.push('/');
     } catch (error) {

@@ -27,6 +27,7 @@ module.exports = {
       backgroundColor: ['disabled'],
       textColor: ['disabled'],
       borderColor: ['disabled'],
+      display: ['motion-reduce'],
     },
   },
   plugins: [
