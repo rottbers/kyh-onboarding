@@ -3,7 +3,7 @@ import Head from 'next/head';
 import router from 'next/router';
 
 import Logo from '../components/Logo';
-import Spinner from '../components/Spinner';
+import LoadingPage from '../components/LoadingPage';
 
 import { useFirebase } from '../contexts/Firebase';
 import sanityClient from '../utils/sanityClient';
@@ -40,7 +40,7 @@ export default function SetupPage({ locations }) {
     }
   }
 
-  if (isLoading) return <Spinner fullscreen />;
+  if (isLoading) return <LoadingPage />;
 
   const isFirstVisit = !user?.locationId && !user?.programId;
 

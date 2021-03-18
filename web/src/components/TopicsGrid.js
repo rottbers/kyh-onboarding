@@ -19,7 +19,7 @@ const TopicCard = ({ title, image, isRead }) => (
           <div
             className="z-20 absolute top-0 left-0 w-full h-full rounded-t bg-center bg-cover"
             style={{
-              backgroundImage: `url(${image?.url}?auto=format&max-w=720&q=50)`,
+              backgroundImage: `url(${image?.url}?auto=format&w=720&fit=max&q=70)`,
             }}
           />
           <div className="absolute z-20 left-0 top-0 h-full w-full rounded-t bg-gray-900 opacity-25" />
