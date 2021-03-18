@@ -9,16 +9,19 @@ const TopicQuestion = ({ question, answer, id }) => {
     <>
       <h3>
         <button
-          className="flex flex-row items-baseline text-left w-full py-4 px-2 focus:outline-none focus:bg-gray-50 hover:bg-gray-50 focus:ring"
+          className="flex flex-row items-baseline text-left w-full py-4 px-2 my-1 focus:outline-none focus:bg-gray-50 hover:bg-gray-50 focus:ring"
           onClick={() => setIsOpen(!isOpen)}
           aria-expanded={isOpen}
           aria-controls={`question-body-${id}`}
           id={`question-heading-${id}`}
         >
-          <span aria-hidden={true} className="mr-4 text-blue">
+          <span
+            aria-hidden={true}
+            className="mr-4 text-blue-opacity-70 text-sm"
+          >
             {isOpen ? <FaMinus /> : <FaPlus />}
           </span>
-          <span className="text-lg">{question}</span>
+          <span className="text-gray-700">{question}</span>
         </button>
       </h3>
       <div

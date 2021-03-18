@@ -5,7 +5,7 @@ import Link from 'next/link';
 import ErrorPage from 'next/error';
 import { MdDashboard, MdArrowForward } from 'react-icons/md';
 
-import Spinner from '../../components/Spinner';
+import LoadingPage from '../../components/LoadingPage';
 import Header from '../../components/Header';
 import TopicBlockContent from '../../components/TopicBlockContent';
 import TopicQuestions from '../../components/TopicQuestions';
@@ -38,7 +38,7 @@ export default function TopicPage({ topic, allTopics }) {
     if (!isNotFound || !isFallback) headingRef.current.focus();
   }, [isNotFound, isFallback, asPath]);
 
-  if (isFallback) return <Spinner fullscreen />;
+  if (isFallback) return <LoadingPage />;
 
   if (isNotFound) return <ErrorPage statusCode={404} />;
 
@@ -68,7 +68,7 @@ export default function TopicPage({ topic, allTopics }) {
                 <div
                   className="absolute z-10 left-0 top-0 h-full w-full bg-cover bg-center"
                   style={{
-                    backgroundImage: `url(${image?.url}?auto=format&max-w=1920&sat=-100&q=75)`,
+                    backgroundImage: `url(${image?.url}?auto=format&w=1920&fit=max&sat=-100&q=70)`,
                   }}
                 />
                 <div className="absolute z-20 left-0 top-0 h-full w-full bg-gray-900 opacity-70 bg-gradient-to-br from-blue-opacity-70 to-orange-opacity-70" />

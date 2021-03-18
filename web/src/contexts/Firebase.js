@@ -3,7 +3,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import router from 'next/router';
-import Spinner from '../components/Spinner';
+import LoadingPage from '../components/LoadingPage';
 
 const config = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -79,18 +79,18 @@ export const FirebaseAuthorization = ({ children }) => {
 
   switch (status) {
     case 'loading':
-      return <Spinner fullscreen />;
+      return <LoadingPage />;
     case 'error':
       return <p>Error...</p>; // TODO: deal with error state
     case 'unauthenticated': {
       if (router.pathname !== '/signin') {
         router.push('/signin');
-        return <Spinner fullscreen />;
+        return <LoadingPage />;
       }
       return children;
     }
     case 'authenticated':
-      return <Spinner fullscreen />;
+      return <LoadingPage />;
     case 'subscribed': {
       return children;
     }

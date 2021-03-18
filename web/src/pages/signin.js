@@ -3,7 +3,7 @@ import router from 'next/router';
 import Head from 'next/head';
 import { FaGoogle } from 'react-icons/fa';
 
-import Spinner from '../components/Spinner';
+import LoadingPage from '../components/LoadingPage';
 import Logo from '../components/Logo';
 
 import { useFirebase } from '../contexts/Firebase';
@@ -56,7 +56,7 @@ export default function SignInPage() {
     handleSignInResponse();
   }, [firebase]);
 
-  if (isLoading) return <Spinner fullscreen />;
+  if (isLoading) return <LoadingPage />;
 
   return (
     <>
