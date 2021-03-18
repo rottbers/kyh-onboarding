@@ -161,10 +161,10 @@ export default function SetupPage({ locations }) {
 
 export async function getStaticProps() {
   const locations = await sanityClient.fetch(
-    `*[_type == "location" && !(_id in path('drafts.**'))] {
+    `*[_type == "location" && !(_id in path('drafts.**'))] | order(title asc) {
       _id,
       title,
-      "programs": *[_type == "program" && location._ref == ^._id && !(_id in path('drafts.**'))] {
+      "programs": *[_type == "program" && location._ref == ^._id && !(_id in path('drafts.**'))] | order(title asc) {
         _id,
         title,
       }
