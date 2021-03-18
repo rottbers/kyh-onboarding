@@ -90,7 +90,7 @@ export default function TopicsPage({ allTopics, allPrograms, allLocations }) {
 export async function getStaticProps() {
   const { allTopics, allLocations, allPrograms } = await sanityClient.fetch(
     `{
-      "allTopics": *[_type == "topic" && !(_id in path('drafts.**'))] {
+      "allTopics": *[_type == "topic" && !(_id in path('drafts.**'))] | order(order asc) {
         _id,
         title,
         "image": image.asset-> {

@@ -7,6 +7,12 @@ export default {
   icon: MdDashboard,
   fields: [
     {
+      name: 'order',
+      title: 'Order',
+      type: 'number',
+      hidden: true,
+    },
+    {
       name: 'title',
       title: 'Title',
       type: 'string',
@@ -138,6 +144,18 @@ export default {
         Rule.required().min(1).error('Assign a program'),
         Rule.unique().error('Program already assigned'),
       ],
+    },
+  ],
+  orderings: [
+    {
+      title: 'Order',
+      name: 'orderAsc',
+      by: [{ field: 'order', direction: 'asc' }],
+    },
+    {
+      title: 'Title',
+      name: 'titleAsc',
+      by: [{ field: 'title', direction: 'asc' }],
     },
   ],
   preview: {

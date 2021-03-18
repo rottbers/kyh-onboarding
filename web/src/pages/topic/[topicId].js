@@ -168,7 +168,7 @@ export async function getStaticProps({ params }) {
         },
         questions,
       },
-      "allTopics": *[_type == "topic" && !(_id in path('drafts.**'))] {
+      "allTopics": *[_type == "topic" && !(_id in path('drafts.**'))] | order(order asc) {
         _id,
         title,
         "programs": programs[]->._id,
