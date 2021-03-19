@@ -89,7 +89,7 @@ export default function TopicPage({ topic, allTopics, allPrograms }) {
             {options?.showCSN && (
               <>
                 {program?.csn ? (
-                  <table className="w-full text-left text-sm sm:text-base">
+                  <table className="w-full text-left text-sm sm:text-base mb-4">
                     <thead>
                       <tr>
                         <th>Start date</th>
@@ -99,13 +99,13 @@ export default function TopicPage({ topic, allTopics, allPrograms }) {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
+                      <tr className="border-t-4 border-transparent">
                         <td>{program.csn?.firstSemester?.startDate}</td>
                         <td>{program.csn?.firstSemester?.endDate}</td>
                         <td>{program.csn?.firstSemester?.weeks}</td>
                         <td>{program.csn?.firstSemester?.points}</td>
                       </tr>
-                      <tr>
+                      <tr className="border-t-4 border-transparent">
                         <td>{program.csn?.secondSemester?.startDate}</td>
                         <td>{program.csn?.secondSemester?.endDate}</td>
                         <td>{program.csn?.secondSemester?.weeks}</td>
@@ -115,6 +115,39 @@ export default function TopicPage({ topic, allTopics, allPrograms }) {
                   </table>
                 ) : (
                   <p>Sorry, no applications dates found for your program.</p>
+                )}
+              </>
+            )}
+            {options?.showClassCodes && (
+              <>
+                {program?.classCodes ? (
+                  <table className="w-full text-left text-sm sm:text-base mb-4">
+                    <thead>
+                      <tr>
+                        <th>Class name</th>
+                        <th>Class code</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {program.classCodes.map(({ name, code }) => (
+                        <tr
+                          key={code}
+                          className="border-t-4 border-transparent"
+                        >
+                          <td>{name}</td>
+                          <td>
+                            <code className="bg-green bg-opacity-25 px-1">
+                              {code}
+                            </code>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  <p>
+                    Sorry, no Google classroom codes found for your program.
+                  </p>
                 )}
               </>
             )}
@@ -211,6 +244,7 @@ export async function getStaticProps({ params }) {
       "allPrograms": *[_type == "program" && !(_id in path('drafts.**'))] {
         _id,
         csn,
+        classCodes,
       }
     }`);
 

@@ -26,6 +26,38 @@ export default {
       validation: (Rule) => [Rule.required()],
     },
     {
+      name: 'classCodes',
+      title: 'Google classroom codes',
+      type: 'array',
+      of: [
+        {
+          name: 'classCode',
+          title: 'Google classroom code',
+          type: 'object',
+          fields: [
+            {
+              name: 'name',
+              title: 'Class name',
+              type: 'string',
+              validation: (Rule) => [Rule.required()],
+            },
+            {
+              name: 'code',
+              title: 'Class code',
+              type: 'string',
+              validation: (Rule) => [Rule.required()],
+            },
+          ],
+          preview: {
+            select: {
+              title: 'name',
+              subtitle: 'code',
+            },
+          },
+        },
+      ],
+    },
+    {
       name: 'csn',
       title: 'CSN application dates',
       type: 'object',
