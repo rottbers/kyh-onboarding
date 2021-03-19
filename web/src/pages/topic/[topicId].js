@@ -5,7 +5,7 @@ import Link from 'next/link';
 import ErrorPage from 'next/error';
 import { MdDashboard, MdArrowForward } from 'react-icons/md';
 
-import Spinner from '../../components/Spinner';
+import LoadingPage from '../../components/LoadingPage';
 import Header from '../../components/Header';
 import TopicBlockContent from '../../components/TopicBlockContent';
 import TopicQuestions from '../../components/TopicQuestions';
@@ -35,10 +35,10 @@ export default function TopicPage({ topic, allTopics, allPrograms }) {
   // To prevent the link for the next topic to remain focused
   // we reset focus to the topic heading when the URL changes.
   useEffect(() => {
-    if (!isNotFound || !isFallback) headingRef.current.focus();
+    if (!isNotFound && !isFallback) headingRef.current.focus();
   }, [isNotFound, isFallback, asPath]);
 
-  if (isFallback) return <Spinner fullscreen />;
+  if (isFallback) return <LoadingPage />;
 
   if (isNotFound) return <ErrorPage statusCode={404} />;
 
@@ -70,7 +70,7 @@ export default function TopicPage({ topic, allTopics, allPrograms }) {
                 <div
                   className="absolute z-10 left-0 top-0 h-full w-full bg-cover bg-center"
                   style={{
-                    backgroundImage: `url(${image?.url}?auto=format&max-w=1920&sat=-100&q=75)`,
+                    backgroundImage: `url(${image?.url}?auto=format&w=1920&fit=max&sat=-100&q=70)`,
                   }}
                 />
                 <div className="absolute z-20 left-0 top-0 h-full w-full bg-gray-900 opacity-70 bg-gradient-to-br from-blue-opacity-70 to-orange-opacity-70" />
@@ -122,22 +122,28 @@ export default function TopicPage({ topic, allTopics, allPrograms }) {
           </div>
         </article>
         <nav className="max-w-2xl mx-auto border-t border-gray-200 pt-8 pb-24 flex flex-col sm:flex-row-reverse justify-between">
-          {nextTopic ? (
-            <Link href={`/topic/${nextTopic._id}`}>
+          {user?.completedOnboarding ? (
+            <div className="sm:w-full sm:p4" />
+          ) : (
+            <Link href={nextTopic ? `/topic/${nextTopic._id}` : '/'}>
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <a className="text-right w-full p-4 mb-4 sm:mb-0 rounded border border-gray-200 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none focus:ring">
                 <p className="text-gray-500 text-sm flex flex-row items-center justify-end">
-                  {`Next topic (${readTopics?.length + 1} / ${topics?.length})`}
+                  {nextTopic
+                    ? `Next topic (${readTopics?.length + 1} / ${
+                        topics?.length
+                      })`
+                    : 'Onboarding complete'}
                   <MdArrowForward
                     aria-hidden={true}
                     className="ml-1 text-orange"
                   />
                 </p>
-                <p className="font-normal text-gray-700">{nextTopic.title}</p>
+                <p className="font-normal text-gray-700">
+                  {nextTopic ? nextTopic.title : 'Read message 🎉'}
+                </p>
               </a>
             </Link>
-          ) : (
-            <div className="sm:w-full sm:p4" />
           )}
           <Link href="/">
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
@@ -197,7 +203,7 @@ export async function getStaticProps({ params }) {
         options,
         questions,
       },
-      "allTopics": *[_type == "topic" && !(_id in path('drafts.**'))] {
+      "allTopics": *[_type == "topic" && !(_id in path('drafts.**'))] | order(order asc) {
         _id,
         title,
         "programs": programs[]->._id,

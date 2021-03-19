@@ -3,7 +3,7 @@ import Head from 'next/head';
 import router from 'next/router';
 
 import Logo from '../components/Logo';
-import Spinner from '../components/Spinner';
+import LoadingPage from '../components/LoadingPage';
 
 import { useFirebase } from '../contexts/Firebase';
 import sanityClient from '../utils/sanityClient';
@@ -31,7 +31,7 @@ export default function SetupPage({ locations }) {
       await firebase
         .firestore()
         .doc(`users/${user.uid}`)
-        .update({ locationId, programId });
+        .update({ locationId, programId, completedOnboarding: false });
 
       router.push('/');
     } catch (error) {
@@ -40,7 +40,7 @@ export default function SetupPage({ locations }) {
     }
   }
 
-  if (isLoading) return <Spinner fullscreen />;
+  if (isLoading) return <LoadingPage />;
 
   const isFirstVisit = !user?.locationId && !user?.programId;
 
@@ -161,10 +161,10 @@ export default function SetupPage({ locations }) {
 
 export async function getStaticProps() {
   const locations = await sanityClient.fetch(
-    `*[_type == "location" && !(_id in path('drafts.**'))] {
+    `*[_type == "location" && !(_id in path('drafts.**'))] | order(title asc) {
       _id,
       title,
-      "programs": *[_type == "program" && location._ref == ^._id && !(_id in path('drafts.**'))] {
+      "programs": *[_type == "program" && location._ref == ^._id && !(_id in path('drafts.**'))] | order(title asc) {
         _id,
         title,
       }

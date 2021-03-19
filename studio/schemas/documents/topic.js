@@ -12,6 +12,12 @@ export default {
   },
   fields: [
     {
+      name: 'order',
+      title: 'Order',
+      type: 'number',
+      hidden: true,
+    },
+    {
       name: 'title',
       title: 'Title',
       type: 'string',
@@ -157,6 +163,18 @@ export default {
       name: 'image',
       title: 'Cover image',
       type: 'image',
+    },
+  ],
+  orderings: [
+    {
+      title: 'Order',
+      name: 'orderAsc',
+      by: [{ field: 'order', direction: 'asc' }],
+    },
+    {
+      title: 'Title',
+      name: 'titleAsc',
+      by: [{ field: 'title', direction: 'asc' }],
     },
   ],
   preview: {

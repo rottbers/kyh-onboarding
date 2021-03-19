@@ -1,4 +1,6 @@
+import { useEffect, useState } from 'react';
 import Head from 'next/head';
+import Confetti from 'react-confetti';
 
 import Header from '../components/Header';
 import TopicsProgress from '../components/TopicsProgress';
@@ -8,7 +10,8 @@ import { useFirebase } from '../contexts/Firebase';
 import sanityClient from '../utils/sanityClient';
 
 export default function TopicsPage({ allTopics, allPrograms, allLocations }) {
-  const { user } = useFirebase();
+  const { user, firebase } = useFirebase();
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const topics = allTopics.filter((topic) => topic?.programs?.includes(user?.programId)); // prettier-ignore
   const unreadTopics = topics.filter((topic) => !user?.readTopics?.includes(topic._id)); // prettier-ignore
@@ -17,13 +20,35 @@ export default function TopicsPage({ allTopics, allPrograms, allLocations }) {
   const program = allPrograms.filter(({ _id }) => user?.programId === _id)[0]; // prettier-ignore
   const location = allLocations.filter(({ _id }) => user?.locationId === _id)[0]; // prettier-ignore
 
+  useEffect(() => {
+    if (!user || !firebase) return;
+
+    if (!unreadTopics.length && !user?.completedOnboarding) {
+      firebase
+        .firestore()
+        .doc(`users/${user.uid}`)
+        .update({ completedOnboarding: true });
+
+      setShowConfetti(true);
+    }
+  }, [user, firebase, unreadTopics]);
+
   return (
     <>
       <Head>
         <title>Topics board | KYH Onboarding</title>
       </Head>
+      {showConfetti && (
+        <Confetti
+          className="motion-reduce:hidden"
+          colors={['#ff0000', '#0000ff', '#ff6205', '#00df62']}
+          opacity={0.7}
+          recycle={false}
+          onConfettiComplete={() => setShowConfetti(false)}
+        />
+      )}
       <Header isDarkBackground={false} />
-      <main className="p-4 container mx-auto">
+      <main className="p-4 container mx-auto z-10 relative">
         <h1 className="sr-only">Topics board</h1>
         <TopicsProgress
           readTopics={readTopics.length}
@@ -65,7 +90,7 @@ export default function TopicsPage({ allTopics, allPrograms, allLocations }) {
 export async function getStaticProps() {
   const { allTopics, allLocations, allPrograms } = await sanityClient.fetch(
     `{
-      "allTopics": *[_type == "topic" && !(_id in path('drafts.**'))] {
+      "allTopics": *[_type == "topic" && !(_id in path('drafts.**'))] | order(order asc) {
         _id,
         title,
         "image": image.asset-> {
