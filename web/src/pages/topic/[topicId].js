@@ -35,7 +35,7 @@ export default function TopicPage({ topic, allTopics }) {
   // To prevent the link for the next topic to remain focused
   // we reset focus to the topic heading when the URL changes.
   useEffect(() => {
-    if (!isNotFound || !isFallback) headingRef.current.focus();
+    if (!isNotFound && !isFallback) headingRef.current.focus();
   }, [isNotFound, isFallback, asPath]);
 
   if (isFallback) return <LoadingPage />;
