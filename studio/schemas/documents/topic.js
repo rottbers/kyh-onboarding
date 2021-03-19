@@ -5,6 +5,11 @@ export default {
   title: 'Topic',
   type: 'document',
   icon: MdDashboard,
+  initialValue: {
+    options: {
+      showCSN: false,
+    },
+  },
   fields: [
     {
       name: 'order',
@@ -63,6 +68,20 @@ export default {
         },
         { type: 'figure' },
         { type: 'youtube' },
+      ],
+    },
+    {
+      name: 'options',
+      title: 'Options',
+      type: 'object',
+      fields: [
+        {
+          name: 'showCSN',
+          title: 'Show CSN table',
+          description:
+            'Inserts a table below the body with CSN application dates for the students program',
+          type: 'boolean',
+        },
       ],
     },
     {
@@ -130,11 +149,6 @@ export default {
       ],
     },
     {
-      name: 'image',
-      title: 'Cover image',
-      type: 'image',
-    },
-    {
       name: 'programs',
       title: 'Programs',
       description: 'Assign the programs relevant for this topic',
@@ -144,6 +158,11 @@ export default {
         Rule.required().min(1).error('Assign a program'),
         Rule.unique().error('Program already assigned'),
       ],
+    },
+    {
+      name: 'image',
+      title: 'Cover image',
+      type: 'image',
     },
   ],
   orderings: [
