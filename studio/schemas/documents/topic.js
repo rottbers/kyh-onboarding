@@ -8,6 +8,7 @@ export default {
   initialValue: {
     options: {
       showCSN: false,
+      showClassCodes: false,
     },
   },
   fields: [
@@ -80,6 +81,13 @@ export default {
           title: 'Show CSN table',
           description:
             'Inserts a table below the body with CSN application dates for the students program',
+          type: 'boolean',
+        },
+        {
+          name: 'showClassCodes',
+          title: 'Show class codes table',
+          description:
+            'Inserts a table below the body with Google classroom codes for the students program',
           type: 'boolean',
         },
       ],
