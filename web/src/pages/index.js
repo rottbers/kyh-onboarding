@@ -48,6 +48,7 @@ export default function TopicsPage() {
     }
   }, [user, firebase, unreadTopics, readTopics]);
 
+  // TODO: maybe not the friendliest way to present error?
   if (status === 'error')
     return <ErrorPage statusCode={error.code} title={error.message} />;
 
@@ -66,35 +67,37 @@ export default function TopicsPage() {
         />
       )}
       <Header isDarkBackground={false} />
-      {status === 'success' && (
-        <main className="p-4 container mx-auto z-10 relative">
-          <h1 className="sr-only">Topics board</h1>
-          <TopicsProgress
-            readTopics={readTopics.length}
-            totalTopics={topics.length}
-          />
-          {!topics.length && (
-            <>
-              <h2 className="text-2xl mt-8 sm:mt-12 mb-2">Topics</h2>
-              <p>Sorry, no topics found for your program.</p>
-            </>
-          )}
-          {unreadTopics.length > 0 && (
-            <>
-              <h2 className="text-2xl mt-8 sm:mt-12 mb-2">
-                {readTopics.length ? 'Unread topics' : 'Topics'}
-              </h2>
-              <TopicsGrid topics={unreadTopics} isRead={false} />
-            </>
-          )}
-          {readTopics.length > 0 && (
-            <>
-              <h2 className="text-2xl mt-8 sm:mt-12 mb-2">Read topics</h2>
-              <TopicsGrid topics={readTopics} isRead={true} />
-            </>
-          )}
-        </main>
-      )}
+      <main className="p-4 container mx-auto z-10 relative">
+        <h1 className="sr-only">Topics board</h1>
+        {status === 'success' && (
+          <>
+            <TopicsProgress
+              readTopics={readTopics.length}
+              totalTopics={topics.length}
+            />
+            {!topics.length && (
+              <>
+                <h2 className="text-2xl mt-8 sm:mt-12 mb-2">Topics</h2>
+                <p>Sorry, no topics found for your program.</p>
+              </>
+            )}
+            {unreadTopics.length > 0 && (
+              <>
+                <h2 className="text-2xl mt-8 sm:mt-12 mb-2">
+                  {readTopics.length ? 'Unread topics' : 'Topics'}
+                </h2>
+                <TopicsGrid topics={unreadTopics} isRead={false} />
+              </>
+            )}
+            {readTopics.length > 0 && (
+              <>
+                <h2 className="text-2xl mt-8 sm:mt-12 mb-2">Read topics</h2>
+                <TopicsGrid topics={readTopics} isRead={true} />
+              </>
+            )}
+          </>
+        )}
+      </main>
     </>
   );
 }
