@@ -36,7 +36,11 @@ const Header = ({ isDarkBackground }) => {
         onClick={() => setIsOpen(!isOpen)}
         className="text-4xl z-50 focus:outline-none border-b-2 border-transparent focus:border-orange hover:border-orange"
       >
-        {isOpen ? <MdClose /> : <MdMenu />}
+        {isOpen ? (
+          <MdClose aria-label="Stäng meny" />
+        ) : (
+          <MdMenu aria-label="Öppna meny" />
+        )}
       </button>
       <div
         className={`transition-opacity fixed left-0 top-0 z-40 min-h-full w-full bg-white py-12 px-4 flex flex-col items-center justify-center ${
@@ -45,8 +49,10 @@ const Header = ({ isDarkBackground }) => {
       >
         <img
           src={user?.photoURL}
+          width={96}
+          height={96}
           alt="avatar"
-          className="mb-4 h-16 w-16 md:h-32 md:w-32 rounded-full bg-center bg-cover bg-gray-200"
+          className="mb-4 rounded-full bg-center bg-cover bg-gray-200"
         />
         <p className="text-gray-700">{user?.displayName}</p>
         <p className="text-gray-700 mb-4">{user?.email}</p>
