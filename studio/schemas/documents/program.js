@@ -60,79 +60,63 @@ export default {
     {
       name: 'csn',
       title: 'CSN application dates',
-      type: 'object',
-      fields: [
+      type: 'array',
+      of: [
         {
-          name: 'firstSemester',
-          title: 'First semester',
+          name: 'csnDate',
+          title: 'CSN application date',
           type: 'object',
-          fieldsets: [{ name: 'csn', options: { columns: 2 } }],
           fields: [
+            {
+              name: 'semester',
+              title: 'Semester',
+              type: 'string',
+              validation: (Rule) => [Rule.required()],
+            },
             {
               name: 'startDate',
               title: 'Start date',
               type: 'date',
-              fieldset: 'csn',
               validation: (Rule) => [Rule.required()],
             },
             {
               name: 'endDate',
               title: 'End date',
               type: 'date',
-              fieldset: 'csn',
               validation: (Rule) => [Rule.required()],
             },
             {
               name: 'weeks',
               title: 'Weeks',
               type: 'number',
-              fieldset: 'csn',
               validation: (Rule) => [Rule.required()],
             },
             {
               name: 'points',
               title: 'YH points',
               type: 'number',
-              fieldset: 'csn',
               validation: (Rule) => [Rule.required()],
             },
           ],
-        },
-        {
-          name: 'secondSemester',
-          title: 'Second semester',
-          type: 'object',
-          fieldsets: [{ name: 'csn', options: { columns: 2 } }],
-          fields: [
-            {
-              name: 'startDate',
-              title: 'Start date',
-              type: 'date',
-              fieldset: 'csn',
-              validation: (Rule) => [Rule.required()],
+          preview: {
+            select: {
+              title: 'semester',
+              startDate: 'startDate',
+              endDate: 'endDate',
+              weeks: 'weeks',
+              points: 'points',
             },
-            {
-              name: 'endDate',
-              title: 'End date',
-              type: 'date',
-              fieldset: 'csn',
-              validation: (Rule) => [Rule.required()],
+            prepare: (selection) => {
+              const { title, startDate, endDate, weeks, points } = selection;
+              const start = startDate.slice(0, 10);
+              const end = endDate.slice(0, 10);
+
+              return {
+                title,
+                subtitle: `${start} - ${end}, ${weeks} weeks, ${points} YH points`,
+              };
             },
-            {
-              name: 'weeks',
-              title: 'Weeks',
-              type: 'number',
-              fieldset: 'csn',
-              validation: (Rule) => [Rule.required()],
-            },
-            {
-              name: 'points',
-              title: 'YH points',
-              type: 'number',
-              fieldset: 'csn',
-              validation: (Rule) => [Rule.required()],
-            },
-          ],
+          },
         },
       ],
     },
