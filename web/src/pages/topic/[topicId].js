@@ -93,9 +93,11 @@ export default function TopicPage({ topic }) {
             {options?.showCSN && (
               <>
                 {program?.csn ? (
+                  // TODO: consider table width on mobile
                   <table className="w-full text-left text-sm sm:text-base mb-4">
                     <thead>
                       <tr>
+                        <th>Semester</th>
                         <th>Start date</th>
                         <th>End date</th>
                         <th>Weeks</th>
@@ -103,18 +105,20 @@ export default function TopicPage({ topic }) {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr className="border-t-4 border-transparent">
-                        <td>{program.csn?.firstSemester?.startDate}</td>
-                        <td>{program.csn?.firstSemester?.endDate}</td>
-                        <td>{program.csn?.firstSemester?.weeks}</td>
-                        <td>{program.csn?.firstSemester?.points}</td>
-                      </tr>
-                      <tr className="border-t-4 border-transparent">
-                        <td>{program.csn?.secondSemester?.startDate}</td>
-                        <td>{program.csn?.secondSemester?.endDate}</td>
-                        <td>{program.csn?.secondSemester?.weeks}</td>
-                        <td>{program.csn?.secondSemester?.points}</td>
-                      </tr>
+                      {program.csn.map(
+                        ({ semester, startDate, endDate, weeks, points }) => (
+                          <tr
+                            key={startDate}
+                            className="border-t-4 border-transparent"
+                          >
+                            <td>{semester}</td>
+                            <td>{startDate?.slice(0, 10)}</td>
+                            <td>{endDate?.slice(0, 10)}</td>
+                            <td>{weeks}</td>
+                            <td>{points}</td>
+                          </tr>
+                        )
+                      )}
                     </tbody>
                   </table>
                 ) : (
