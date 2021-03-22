@@ -97,11 +97,11 @@ export default function TopicPage({ topic }) {
                   <table className="w-full text-left text-sm sm:text-base mb-4">
                     <thead>
                       <tr>
-                        <th>Semester</th>
-                        <th>Start date</th>
-                        <th>End date</th>
-                        <th>Weeks</th>
-                        <th>YH points</th>
+                        <th>Termin</th>
+                        <th>Start</th>
+                        <th>Slut</th>
+                        <th>Veckor</th>
+                        <th>YH poäng</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -122,7 +122,9 @@ export default function TopicPage({ topic }) {
                     </tbody>
                   </table>
                 ) : (
-                  <p>Sorry, no applications dates found for your program.</p>
+                  <p>
+                    Tyvärr, inga ansökningsdatum hittades för din utbildning.
+                  </p>
                 )}
               </>
             )}
@@ -132,8 +134,8 @@ export default function TopicPage({ topic }) {
                   <table className="w-full text-left text-sm sm:text-base mb-4">
                     <thead>
                       <tr>
-                        <th>Class name</th>
-                        <th>Class code</th>
+                        <th>Kurs</th>
+                        <th>Kurskod</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -153,9 +155,7 @@ export default function TopicPage({ topic }) {
                     </tbody>
                   </table>
                 ) : (
-                  <p>
-                    Sorry, no Google classroom codes found for your program.
-                  </p>
+                  <p>Tyvärr, inga kurskoder hittades för din utbildning.</p>
                 )}
               </>
             )}
@@ -171,17 +171,17 @@ export default function TopicPage({ topic }) {
               <a className="text-right w-full p-4 mb-4 sm:mb-0 rounded border border-gray-200 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none focus:ring">
                 <p className="text-gray-500 text-sm flex flex-row items-center justify-end">
                   {nextTopic
-                    ? `Next topic (${topics.length - nextTopics.length + 1} / ${
+                    ? `Nästa ämne (${topics.length - nextTopics.length + 1} / ${
                         topics?.length
                       })`
-                    : 'Onboarding complete'}
+                    : 'Onboarding avklarad'}
                   <MdArrowForward
                     aria-hidden={true}
                     className="ml-1 text-orange"
                   />
                 </p>
                 <p className="font-normal text-gray-700">
-                  {nextTopic ? nextTopic.title : 'Read message 🎉'}
+                  {nextTopic ? nextTopic.title : 'Läs meddelande 🎉'}
                 </p>
               </a>
             </Link>
@@ -197,9 +197,9 @@ export default function TopicPage({ topic }) {
                     className="mr-1 text-gray-400"
                   />
                 </span>
-                Topics board
+                Ämnen
               </p>
-              <p className="font-normal text-gray-700">Browse all topics</p>
+              <p className="font-normal text-gray-700">Se alla ämnen</p>
             </a>
           </Link>
         </nav>

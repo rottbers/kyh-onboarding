@@ -40,7 +40,7 @@ const TopicQuestions = ({ questions }) => (
   <>
     {questions && (
       <>
-        <h2 className="text-2xl mt-12 mb-2">Frequently asked questions</h2>
+        <h2 className="text-2xl mt-12 mb-2">Vanliga frågor</h2>
         {questions.map(({ _key, question, answer }) => (
           <TopicQuestion
             key={_key}

@@ -58,14 +58,14 @@ const Header = ({ isDarkBackground }) => {
         <Link href="/setup">
           {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <a className="mb-8 font-normal text-xl focus:outline-none focus:underline focus:underline-orange hover:underline hover:underline-orange">
-            Change location or program
+            Uppdatera ort eller utbildning
           </a>
         </Link>
         <button
           className="font-normal text-xl focus:outline-none focus:underline focus:underline-orange hover:underline hover:underline-orange"
           onClick={() => firebase.auth().signOut()}
         >
-          Sign out
+          Logga ut
         </button>
       </div>
     </header>

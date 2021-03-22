@@ -20,7 +20,7 @@ export default function SignInPage() {
 
     const provider = new firebase.auth.GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
-    firebase.auth().useDeviceLanguage();
+    firebase.auth().languageCode = router.locale;
     firebase.auth().signInWithRedirect(provider);
   }
 
@@ -37,7 +37,7 @@ export default function SignInPage() {
         if (!isValidEmail) {
           firebase.auth().signOut();
           throw new Error(
-            `${user.email} is unauthorized. Make sure you sign in using a @student.kyh.se account.`
+            `${user.email} är obehörig. Se till att logga in med ett @student.kyh.se konto.`
           );
         }
 
@@ -61,7 +61,7 @@ export default function SignInPage() {
   return (
     <>
       <Head>
-        <title>Sign in | KYH Onboarding</title>
+        <title>Logga in | KYH Onboarding</title>
       </Head>
       <main className="w-full min-h-screen flex flex-col sm:items-center md:justify-center p-4">
         <h1 className="text-3xl sm:text-4xl text-center mb-8">
@@ -69,8 +69,8 @@ export default function SignInPage() {
           Onboarding
         </h1>
         <p className="text-center">
-          Onboarding requires a <b>@student.kyh.se</b> Google account provided
-          by faculty.
+          Onboarding kräver ett <b>@student.kyh.se</b> Google-konto som du
+          tilldelats av KYH.
         </p>
         <form
           onSubmit={handleSignInRequest}
@@ -84,7 +84,7 @@ export default function SignInPage() {
             <span className="not-sr-only mr-1">
               <FaGoogle />
             </span>{' '}
-            Sign in with Google
+            Logga in med Google
           </button>
           {isError && (
             <p className="mt-4 text-center text-red font-normal" role="alert">
