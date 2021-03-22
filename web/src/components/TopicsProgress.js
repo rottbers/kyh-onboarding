@@ -8,15 +8,15 @@ const TopicsProgress = ({ readTopics, totalTopics }) => {
       <>
         {readTopics === 0 && (
           <p className="font-normal my-2">
-            Below you&apos;ll find various topics with information about the{' '}
-            <span className="font-semibold">{program?.title}</span> program
-            you&apos;ll be studying in{' '}
+            Nedan hittar du olika ämnen med information om{' '}
+            <span className="font-semibold">{program?.title}</span> programmet
+            du kommer läsa i{' '}
             <span className="font-semibold">{program?.location?.title}</span>.
-            We suggest you read through all of them (
+            Vi rekommenderar att du läser igenom allihopa (
             <span role="img" aria-label="nerd face emoji">
               🤓
             </span>
-            ). Pick a topic below to get started{' '}
+            ). Klicka på ett ämne för att köra igång{' '}
             <span role="img" aria-label="hand pointing down emoji">
               👇
             </span>
@@ -26,7 +26,7 @@ const TopicsProgress = ({ readTopics, totalTopics }) => {
         {readTopics !== 0 && readTopics < totalTopics && (
           <p className="font-normal my-2">
             {totalTopics - readTopics}{' '}
-            {readTopics === totalTopics - 1 ? 'topic' : 'topics'} left{' '}
+            {readTopics === totalTopics - 1 ? 'ämne' : 'ämnen'} kvar{' '}
             <span role="img" aria-label="books emoji">
               📚
             </span>
@@ -35,27 +35,28 @@ const TopicsProgress = ({ readTopics, totalTopics }) => {
 
         {totalTopics !== 0 && readTopics === totalTopics && (
           <p className="font-normal my-2">
-            Good job going through all the topics!{' '}
+            Bra jobbat med att läsa alla ämnen!{' '}
             <span role="img" aria-label="clap emoji">
               👏
             </span>{' '}
-            You&apos;re done with onboarding and now the classroom awaits! The
-            topics will remain available so you can always come back and revisit
-            the information later. In case you still have questions then
-            you&apos;re welcome to to get in contact with your program lead via{' '}
+            Du är klar med onboarding och härnäst väntar uppstarten! Alla ämnen
+            kommer finnas kvar om du skulle vilja komma tillbaka och läsa något
+            igen. Om du fortfarande har frågor är du så klart välkommen att höra
+            av dig till din utbildningsledare genom{' '}
             <a
               className="font-semibold focus:outline-none hover:underline focus:underline hover:underline-orange focus:underline-orange"
               href={`mailto:${program?.email}`}
             >
               {program?.email}
             </a>
-            . See you around!{' '}
+            . Vi ses i klassrummet!{' '}
             <span role="img" aria-label="victory hand emoji">
               ✌️
             </span>
           </p>
         )}
       </>
+      {/* TODO: a11y of progress bar */}
       {readTopics !== 0 && (
         <div className="relative h-4 w-full">
           <span className="absolute w-full text-center z-10 text-xs font-semibold leading-4 text-white">

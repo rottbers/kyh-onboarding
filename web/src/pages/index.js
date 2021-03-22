@@ -55,7 +55,7 @@ export default function TopicsPage() {
   return (
     <>
       <Head>
-        <title>Topics board | KYH Onboarding</title>
+        <title>Ämnen | KYH Onboarding</title>
       </Head>
       {showConfetti && (
         <Confetti
@@ -68,7 +68,7 @@ export default function TopicsPage() {
       )}
       <Header isDarkBackground={false} />
       <main className="p-4 container mx-auto z-10 relative">
-        <h1 className="sr-only">Topics board</h1>
+        <h1 className="sr-only">Ämnen</h1>
         {status === 'success' && (
           <>
             <TopicsProgress
@@ -77,21 +77,19 @@ export default function TopicsPage() {
             />
             {!topics.length && (
               <>
-                <h2 className="text-2xl mt-8 sm:mt-12 mb-2">Topics</h2>
-                <p>Sorry, no topics found for your program.</p>
+                <h2 className="text-2xl mt-8 sm:mt-12 mb-2">Alla ämnen</h2>
+                <p>Tyvärr, inga ämnen hittades för din utbildning.</p>
               </>
             )}
             {unreadTopics.length > 0 && (
               <>
-                <h2 className="text-2xl mt-8 sm:mt-12 mb-2">
-                  {readTopics.length ? 'Unread topics' : 'Topics'}
-                </h2>
+                <h2 className="text-2xl mt-8 sm:mt-12 mb-2">Olästa ämnen</h2>
                 <TopicsGrid topics={unreadTopics} isRead={false} />
               </>
             )}
             {readTopics.length > 0 && (
               <>
-                <h2 className="text-2xl mt-8 sm:mt-12 mb-2">Read topics</h2>
+                <h2 className="text-2xl mt-8 sm:mt-12 mb-2">Lästa ämnen</h2>
                 <TopicsGrid topics={readTopics} isRead={true} />
               </>
             )}

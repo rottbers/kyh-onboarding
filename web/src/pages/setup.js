@@ -47,7 +47,7 @@ export default function SetupPage({ locations, programs }) {
   return (
     <>
       <Head>
-        <title>Setup | KYH Onboarding</title>
+        <title>Välj utbildning | KYH Onboarding</title>
       </Head>
       <main className="w-full min-h-screen flex flex-col sm:items-center md:justify-center p-4">
         <h1 className="text-3xl sm:text-4xl text-center mb-8">
@@ -57,37 +57,37 @@ export default function SetupPage({ locations, programs }) {
         {isFirstVisit ? (
           <>
             <p className="mb-2">
-              Hey {user?.displayName.split(' ')[0]}!{' '}
+              Hej {user?.displayName.split(' ')[0]}!{' '}
               <span role="img" aria-label="wave emoji">
                 👋
               </span>{' '}
-              Hope you’re excited! We’re looking forward to have you at KYH
-              starting this semester.
+              Hoppas du är förväntansfull! Vi ser fram emot att ha dig som
+              studerande hos oss på KYH.
             </p>
             <p className="mb-2">
-              We know you may have questions so we created this website to
-              hopefully answer some of them.
+              Vi vet att nya studenter ofta har frågor vilket är varför den här
+              sidan är framtagen för din skull.
             </p>
             <p className="mb-2">
-              Now that you&apos;re signed in, select your location and program
-              to start onboarding.
+              Nu när du är inloggad, välj den ort & utbildning du blivit antagen
+              till för att start onboarding.
             </p>
           </>
         ) : isInvalidProgramId ? (
           <p className="mb-2">
-            Seems like your program no longer exists. See if you can select it
-            below otherwise contact faculty.
+            Verkar som din utbildning inte längre finns i vårat system. Se om du
+            kan hitta den nedan annars ta kontakt med KYH.
           </p>
         ) : (
           <p className="mb-2">
-            Picked the wrong location or program? Don&apos;t worry, just update
-            it below.
+            Valde du fel ort eller utbildning för sidan? Det lugnt, bara att
+            uppdatera ditt val nedan.
           </p>
         )}
 
         <form onSubmit={onSubmit} className="flex flex-col w-full md:w-96 mt-4">
           <label htmlFor="location" className="font-semibold mb-1">
-            Location
+            Ort
           </label>
           <select
             className="mb-4 rounded-sm bg-transparent cursor-pointer focus:ring focus:ring-blue-500 focus:ring-opacity-50"
@@ -118,7 +118,7 @@ export default function SetupPage({ locations, programs }) {
               !locationId || availablePrograms.length < 1 ? 'text-gray-400' : ''
             }`}
           >
-            Program
+            Utbildning
           </label>
           <select
             disabled={!locationId || availablePrograms.length < 1}
@@ -148,7 +148,7 @@ export default function SetupPage({ locations, programs }) {
             disabled={!locationId || !programId || isLoading}
             className="w-full mt-4 py-3 font-semibold bg-orange text-white border border-orange disabled:border-gray-400 disabled:bg-transparent disabled:text-gray-400 disabled:cursor-default rounded-sm focus:outline-none focus:ring"
           >
-            {isFirstVisit ? 'Start onboarding ✌️' : 'Update'}
+            {isFirstVisit ? 'Starta onboarding ✌️' : 'Uppdatera'}
           </button>
           {isError && (
             <p className="mt-4 text-center text-red font-normal" role="alert">
