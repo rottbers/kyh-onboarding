@@ -6,9 +6,9 @@ import Logo from '../components/Logo';
 import LoadingPage from '../components/LoadingPage';
 
 import { useFirebase } from '../contexts/Firebase';
-import sanityClient from '../utils/sanityClient';
+import { sanityClient } from '../utils/sanity';
 
-export default function SetupPage({ locations }) {
+export default function SetupPage({ locations, programs }) {
   const { firebase, user } = useFirebase();
   const [locationId, setLocationId] = useState(undefined);
   const [programId, setProgramId] = useState(undefined);
@@ -17,11 +17,10 @@ export default function SetupPage({ locations }) {
   const [isError, setIsError] = useState(false);
 
   useEffect(() => {
-    const locationIndex = locations.findIndex(({ _id }) => _id === locationId);
-
+    const filteredPrograms = programs.filter((program) => program.locationId === locationId); // prettier-ignore
     setProgramId(undefined);
-    setAvailablePrograms(locations[locationIndex]?.programs ?? []);
-  }, [locationId, locations]);
+    setAvailablePrograms(filteredPrograms);
+  }, [locationId, programs]);
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -31,7 +30,7 @@ export default function SetupPage({ locations }) {
       await firebase
         .firestore()
         .doc(`users/${user.uid}`)
-        .update({ locationId, programId, completedOnboarding: false });
+        .update({ programId, completedOnboarding: false });
 
       router.push('/');
     } catch (error) {
@@ -42,7 +41,8 @@ export default function SetupPage({ locations }) {
 
   if (isLoading) return <LoadingPage />;
 
-  const isFirstVisit = !user?.locationId && !user?.programId;
+  const isFirstVisit = !user?.programId;
+  const isInvalidProgramId = !isFirstVisit && !programs.some((program) => program._id === user?.programId); // prettier-ignore
 
   return (
     <>
@@ -57,11 +57,11 @@ export default function SetupPage({ locations }) {
         {isFirstVisit ? (
           <>
             <p className="mb-2">
-              Hey{' '}
+              Hey {user?.displayName.split(' ')[0]}!{' '}
               <span role="img" aria-label="wave emoji">
                 👋
-              </span>
-              ! Hope you’re excited! We’re looking forward to have you at KYH
+              </span>{' '}
+              Hope you’re excited! We’re looking forward to have you at KYH
               starting this semester.
             </p>
             <p className="mb-2">
@@ -73,6 +73,11 @@ export default function SetupPage({ locations }) {
               to start onboarding.
             </p>
           </>
+        ) : isInvalidProgramId ? (
+          <p className="mb-2">
+            Seems like your program no longer exists. See if you can select it
+            below otherwise contact faculty.
+          </p>
         ) : (
           <p className="mb-2">
             Picked the wrong location or program? Don&apos;t worry, just update
@@ -160,16 +165,19 @@ export default function SetupPage({ locations }) {
 }
 
 export async function getStaticProps() {
-  const locations = await sanityClient.fetch(
-    `*[_type == "location" && !(_id in path('drafts.**'))] | order(title asc) {
-      _id,
-      title,
-      "programs": *[_type == "program" && location._ref == ^._id && !(_id in path('drafts.**'))] | order(title asc) {
+  const { locations, programs } = await sanityClient.fetch(
+    `{
+      "locations": *[_type == "location" && !(_id in path('drafts.**'))] | order(title asc) {
         _id,
         title,
+      },
+      "programs": *[_type == "program" && !(_id in path('drafts.**'))] | order(title asc) {
+        _id,
+        title,
+        "locationId": location._ref
       }
     }`
   );
 
-  return { props: { locations }, revalidate: 30 };
+  return { props: { locations, programs }, revalidate: 30 };
 }

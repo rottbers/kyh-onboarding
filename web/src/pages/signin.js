@@ -45,8 +45,8 @@ export default function SignInPage() {
         const userDocument = await userDocumentRef.get();
         if (!userDocument.exists) await userDocumentRef.set({});
 
-        const data = userDocument.data(); // TODO: check that programId and locationId still exists in CMS
-        router.push(data?.programId && data?.locationId ? '/' : '/setup');
+        const data = userDocument.data();
+        router.push(data?.programId ? '/' : '/setup');
       } catch (error) {
         setIsError(error);
         setIsLoading(false);

@@ -3,14 +3,13 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import router from 'next/router';
+import ErrorPage from 'next/error';
 import LoadingPage from '../components/LoadingPage';
 
 const config = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
@@ -75,13 +74,13 @@ export const FirebaseProvider = ({ children }) => {
 export const useFirebase = () => useContext(FirebaseContext);
 
 export const FirebaseAuthorization = ({ children }) => {
-  const { status } = useFirebase();
+  const { status, error } = useFirebase();
 
   switch (status) {
     case 'loading':
       return <LoadingPage />;
     case 'error':
-      return <p>Error...</p>; // TODO: deal with error state
+      return <ErrorPage statusCode={error.code} title={error.message} />;
     case 'unauthenticated': {
       if (router.pathname !== '/signin') {
         router.push('/signin');
