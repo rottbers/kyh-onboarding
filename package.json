@@ -7,11 +7,11 @@
     "lint:studio": "yarn workspace studio lint",
     "start:web": "yarn workspace web dev",
     "build:web": "yarn workspace web build",
-    "serve:web": "yarn workspace web start",
     "lint:web": "yarn workspace web lint",
     "start": "concurrently yarn:start:*",
     "build": "yarn lint && yarn build:studio && yarn build:web",
-    "lint": "yarn lint:studio && yarn lint:web"
+    "lint": "yarn lint:studio && yarn lint:web",
+    "serve": "yarn workspace web start"
   },
   "workspaces": {
     "packages": [

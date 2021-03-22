@@ -3,6 +3,7 @@ import '../fonts/index.css';
 import '../styles/tailwind.css';
 
 import { FirebaseProvider, FirebaseAuthorization } from '../contexts/Firebase';
+import { ContentProvider } from '../contexts/Content';
 
 export default function App({ Component, pageProps }) {
   return (
@@ -37,10 +38,14 @@ export default function App({ Component, pageProps }) {
           content="https://kyh-onboarding.vercel.app/social.png"
         />
         <meta property="twitter:card" content="summary_large_image" />
+        <link rel="preconnect" href="https://www.googleapis.com" />
+        <link rel="preconnect" href="https://firestore.googleapis.com" />
       </Head>
       <FirebaseProvider>
         <FirebaseAuthorization>
-          <Component {...pageProps} />
+          <ContentProvider>
+            <Component {...pageProps} />
+          </ContentProvider>
         </FirebaseAuthorization>
       </FirebaseProvider>
     </>

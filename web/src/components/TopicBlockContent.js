@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import getYouTubeId from 'get-youtube-id';
 import BlockContent from '@sanity/block-content-to-react';
+import { projectId, dataset } from '../utils/sanity';
 
 const TopicBlockContent = ({ blocks }) => {
   const serializers = {
@@ -54,8 +55,8 @@ const TopicBlockContent = ({ blocks }) => {
       <BlockContent
         blocks={blocks}
         serializers={serializers}
-        projectId="oo5ws9d6"
-        dataset="production"
+        projectId={projectId}
+        dataset={dataset}
       />
     </div>
   );

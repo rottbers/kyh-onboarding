@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -11,11 +11,19 @@ import TopicBlockContent from '../../components/TopicBlockContent';
 import TopicQuestions from '../../components/TopicQuestions';
 
 import { useFirebase } from '../../contexts/Firebase';
-import sanityClient from '../../utils/sanityClient';
+import { useContent } from '../../contexts/Content';
+import { sanityClient } from '../../utils/sanity';
 
-export default function TopicPage({ topic, allTopics, allPrograms }) {
+export default function TopicPage({ topic }) {
   const { firebase, user } = useFirebase();
+  const { topics, program } = useContent();
   const { isFallback, asPath } = useRouter();
+  const [nextTopics, setNextTopics] = useState([]);
+
+  useEffect(() => {
+    const next = topics.filter(({ _id }) => !user?.readTopics?.includes(_id));
+    setNextTopics(next);
+  }, [topics, user]);
 
   const isNotFound = !topic || (typeof topic === 'object' && !Object.keys(topic).length); // prettier-ignore
 
@@ -42,11 +50,7 @@ export default function TopicPage({ topic, allTopics, allPrograms }) {
 
   if (isNotFound) return <ErrorPage statusCode={404} />;
 
-  const topics = allTopics.filter((topic) => topic?.programs?.includes(user?.programId)); // prettier-ignore
-  const readTopics = topics.filter((topic) => user?.readTopics?.includes(topic._id)); // prettier-ignore
-  const nextTopic = topics.filter((topic) => !user?.readTopics?.includes(topic._id))[0]; // prettier-ignore
-
-  const program = allPrograms.filter(({ _id }) => user?.programId === _id)[0];
+  const nextTopic = nextTopics[0];
 
   const { title, body, image, questions, options } = topic;
 
@@ -163,7 +167,7 @@ export default function TopicPage({ topic, allTopics, allPrograms }) {
               <a className="text-right w-full p-4 mb-4 sm:mb-0 rounded border border-gray-200 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none focus:ring">
                 <p className="text-gray-500 text-sm flex flex-row items-center justify-end">
                   {nextTopic
-                    ? `Next topic (${readTopics?.length + 1} / ${
+                    ? `Next topic (${topics.length - nextTopics.length + 1} / ${
                         topics?.length
                       })`
                     : 'Onboarding complete'}
@@ -213,9 +217,8 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-  const { topic, allTopics, allPrograms } = await sanityClient.fetch(`
-    {
-      "topic": *[_type == "topic" && _id == "${params.topicId}" && !(_id in path('drafts.**'))][0] {
+  const topic = await sanityClient.fetch(
+    `*[_type == "topic" && _id == "${params.topicId}" && !(_id in path('drafts.**'))][0] {
         _id,
         "image": image.asset-> {
           url,
@@ -235,18 +238,8 @@ export async function getStaticProps({ params }) {
         },
         options,
         questions,
-      },
-      "allTopics": *[_type == "topic" && !(_id in path('drafts.**'))] | order(order asc) {
-        _id,
-        title,
-        "programs": programs[]->._id,
-      },
-      "allPrograms": *[_type == "program" && !(_id in path('drafts.**'))] {
-        _id,
-        csn,
-        classCodes,
-      }
-    }`);
+    }`
+  );
 
-  return { props: { topic, allTopics, allPrograms }, revalidate: 30 };
+  return { props: { topic }, revalidate: 30 };
 }
