@@ -112,8 +112,8 @@ export default function TopicPage({ topic }) {
                             className="border-t-4 border-transparent"
                           >
                             <td>{semester}</td>
-                            <td>{startDate?.slice(0, 10)}</td>
-                            <td>{endDate?.slice(0, 10)}</td>
+                            <td>{startDate}</td>
+                            <td>{endDate}</td>
                             <td>{weeks}</td>
                             <td>{points}</td>
                           </tr>

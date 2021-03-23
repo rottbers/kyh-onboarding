@@ -108,12 +108,10 @@ export default {
             },
             prepare: (selection) => {
               const { title, startDate, endDate, weeks, points } = selection;
-              const start = startDate.slice(0, 10);
-              const end = endDate.slice(0, 10);
 
               return {
                 title,
-                subtitle: `${start} - ${end}, ${weeks} weeks, ${points} YH points`,
+                subtitle: `${startDate} - ${endDate}, ${weeks} weeks, ${points} YH points`,
               };
             },
           },
