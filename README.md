@@ -1,19 +1,26 @@
 # KYH Onboarding ✌️
 
-This project is setup as a monorepo using [yarn workspaces](https://classic.yarnpkg.com/en/docs/workspaces/) containing two workspaces:
-
-- `studio/` - the CMS built with [sanity studio](https://www.sanity.io/)
-- `web/` - the website built with [next.js](https://nextjs.org/)
+An onboarding platform for KYH students.
 
 ## Development
 
-...
+This project is setup as a monorepo using [yarn workspaces](https://classic.yarnpkg.com/en/docs/workspaces/) containing two workspaces:
+
+- `studio/` - the CMS built with [sanity studio](https://www.sanity.io/studio/)
+- `web/` - the website built with [next.js](https://nextjs.org/)
+
+In order to conveniently implement certain features this project depends on two external services:
+
+- [sanity](https://www.sanity.io/) - headless CMS used to store and query content. Accessed server-side.
+- [firebase](https://firebase.google.com/) - used for Google auth along with storing user settings in firestore. Accessed client-side.
+
+The approach has been to make use of Incremental Static Regeneration (ISR) where possible for content to be static along with Client-Side Rendering (CSR) where content needs to be dynamic.
 
 ### Prerequisites
 
 - [node.js](https://nodejs.org/)
 - [yarn](https://yarnpkg.com/) (`npm i -g yarn`)
-- [firebase](https://firebase.google.com/) & [sanity](https://www.sanity.io) API credentials
+- [sanity](https://www.sanity.io/) & [firebase](https://firebase.google.com/) API credentials
 
 ### Get started
 
