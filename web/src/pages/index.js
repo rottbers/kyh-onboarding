@@ -6,6 +6,7 @@ import Confetti from 'react-confetti';
 import Header from '../components/Header';
 import TopicsProgress from '../components/TopicsProgress';
 import TopicsGrid from '../components/TopicsGrid';
+import LoadingPage from '../components/LoadingPage';
 
 import { useFirebase } from '../contexts/Firebase';
 import { useContent } from '../contexts/Content';
@@ -48,10 +49,6 @@ export default function TopicsPage() {
     }
   }, [user, firebase, unreadTopics, readTopics]);
 
-  // TODO: maybe not the friendliest way to present error?
-  if (status === 'error')
-    return <ErrorPage statusCode={error.code} title={error.message} />;
-
   return (
     <>
       <Head>
@@ -69,6 +66,16 @@ export default function TopicsPage() {
       <Header isDarkBackground={false} />
       <main className="p-4 container mx-auto z-10 relative">
         <h1 className="sr-only">Ämnen</h1>
+        {(status === 'idle' || status === 'loading') && (
+          <div className="fixed top-0 left-0 w-full">
+            <LoadingPage />
+          </div>
+        )}
+        {status === 'error' && (
+          <div className="fixed top-0 left-0 w-full">
+            <ErrorPage statusCode={error?.code} title={error.message} />
+          </div>
+        )}
         {status === 'success' && (
           <>
             <TopicsProgress
