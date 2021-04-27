@@ -7,6 +7,7 @@ export default {
   icon: MdDashboard,
   initialValue: {
     options: {
+      _type: 'object',
       showCSN: false,
       showClassCodes: false,
     },
