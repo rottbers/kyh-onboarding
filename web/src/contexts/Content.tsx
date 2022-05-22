@@ -30,6 +30,7 @@ type Topic = {
     };
     url: string;
   };
+  _id: string;
   title: string;
 };
 
