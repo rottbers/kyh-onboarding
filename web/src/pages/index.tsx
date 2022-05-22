@@ -2,17 +2,15 @@ import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import ErrorPage from 'next/error';
 import Confetti from 'react-confetti';
-
 import Header from '../components/Header';
 import TopicsProgress from '../components/TopicsProgress';
 import TopicsGrid from '../components/TopicsGrid';
 import LoadingPage from '../components/LoadingPage';
-
-import { useFirebase } from '../contexts/Firebase';
-import { useContent } from '../contexts/Content';
+import { useContent, useUserDispatch, useUserState } from '../contexts';
 
 export default function TopicsPage() {
-  const { user, firebase } = useFirebase();
+  const user = useUserState();
+  const userDispatch = useUserDispatch();
   const { topics, status, error } = useContent();
   const [readTopics, setReadTopics] = useState([]);
   const [unreadTopics, setUnreadTopics] = useState([]);
@@ -22,32 +20,26 @@ export default function TopicsPage() {
     const read = [];
     const unread = [];
 
-    topics.forEach((topic) =>
-      user?.readTopics?.includes(topic._id)
+    topics.forEach((topic) => {
+      user.readTopics.includes(topic._id)
         ? read.push(topic)
-        : unread.push(topic)
-    );
+        : unread.push(topic);
+    });
 
     setReadTopics(read);
     setUnreadTopics(unread);
   }, [user, topics]);
 
   useEffect(() => {
-    if (!user || !firebase) return;
-
     if (
       readTopics.length &&
       !unreadTopics.length &&
       !user?.completedOnboarding
     ) {
-      firebase
-        .firestore()
-        .doc(`users/${user.uid}`)
-        .update({ completedOnboarding: true });
-
       setShowConfetti(true);
+      userDispatch({ type: 'COMPLETED_ONBOARDING' });
     }
-  }, [user, firebase, unreadTopics, readTopics]);
+  }, [user, unreadTopics, readTopics]);
 
   return (
     <>

@@ -1,48 +1,32 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Head from 'next/head';
 import router from 'next/router';
-
 import Logo from '../components/Logo';
-import LoadingPage from '../components/LoadingPage';
-
-import { useFirebase } from '../contexts/Firebase';
+import { useUserDispatch, useUserState } from '../contexts';
 import { sanityClient } from '../utils/sanity';
 
 export default function SetupPage({ locations, programs }) {
-  const { firebase, user } = useFirebase();
-  const [locationId, setLocationId] = useState(undefined);
-  const [programId, setProgramId] = useState(undefined);
-  const [availablePrograms, setAvailablePrograms] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const user = useUserState();
+  const dispatch = useUserDispatch();
+  const [locationId, setLocationId] = useState('');
+  const [programId, setProgramId] = useState('');
+
+  const availablePrograms = useMemo(() => programs.filter((p) => p.locationId === locationId), [locationId]); // prettier-ignore
+  const isFirstVisit = user.status === 'not-setup';
+  const isInvalidProgramId = !isFirstVisit && !programs.some((p) => p._id === user?.programId); // prettier-ignore
 
   useEffect(() => {
-    const filteredPrograms = programs.filter((program) => program.locationId === locationId); // prettier-ignore
-    setProgramId(undefined);
-    setAvailablePrograms(filteredPrograms);
-  }, [locationId, programs]);
-
-  async function onSubmit(e) {
-    e.preventDefault();
-    setIsLoading(true);
-
-    try {
-      await firebase
-        .firestore()
-        .doc(`users/${user.uid}`)
-        .update({ programId, completedOnboarding: false });
-
-      router.push('/');
-    } catch (error) {
-      setIsError(error);
-      setIsLoading(false);
+    if (user.programId && !isFirstVisit) {
+      setProgramId(user.programId);
+      setLocationId(programs.find((p) => p._id === user.programId)?.locationId);
     }
+  }, [user, isFirstVisit]);
+
+  function onSubmit(e) {
+    e.preventDefault();
+    dispatch({ type: 'SETUP', data: { programId } });
+    router.push('/');
   }
-
-  if (isLoading) return <LoadingPage />;
-
-  const isFirstVisit = !user?.programId;
-  const isInvalidProgramId = !isFirstVisit && !programs.some((program) => program._id === user?.programId); // prettier-ignore
 
   return (
     <>
@@ -57,7 +41,7 @@ export default function SetupPage({ locations, programs }) {
         {isFirstVisit ? (
           <>
             <p className="mb-2">
-              Hej {user?.displayName.split(' ')[0]}!{' '}
+              Hej!{' '}
               <span role="img" aria-label="wave emoji">
                 👋
               </span>{' '}
@@ -69,8 +53,8 @@ export default function SetupPage({ locations, programs }) {
               sidan är framtagen för din skull.
             </p>
             <p className="mb-2">
-              Nu när du är inloggad, välj den ort & utbildning du blivit antagen
-              till för att start onboarding.
+              Välj den ort & utbildning du blivit antagen till för att start
+              onboarding.
             </p>
           </>
         ) : isInvalidProgramId ? (
@@ -95,9 +79,12 @@ export default function SetupPage({ locations, programs }) {
             name="location"
             id="location"
             value={locationId}
-            onChange={(e) => setLocationId(e.target.value)}
+            onChange={(e) => {
+              setProgramId('');
+              setLocationId(e.target.value);
+            }}
           >
-            <option hidden value={undefined}>
+            <option hidden value="">
               -
             </option>
             {locations &&
@@ -129,7 +116,7 @@ export default function SetupPage({ locations, programs }) {
             value={programId}
             onChange={(e) => setProgramId(e.target.value)}
           >
-            <option hidden value={undefined}>
+            <option hidden value="">
               -
             </option>
             {availablePrograms.map((program) => (
@@ -145,19 +132,11 @@ export default function SetupPage({ locations, programs }) {
 
           <button
             type="submit"
-            disabled={!locationId || !programId || isLoading}
+            disabled={!locationId || !programId}
             className="w-full mt-4 py-3 font-semibold bg-orange text-white border border-orange disabled:border-gray-400 disabled:bg-transparent disabled:text-gray-400 disabled:cursor-default rounded-sm focus:outline-none focus:ring"
           >
             {isFirstVisit ? 'Starta onboarding ✌️' : 'Uppdatera'}
           </button>
-          {isError && (
-            <p className="mt-4 text-center text-red font-normal" role="alert">
-              <span role="img" aria-label="hand emoji">
-                ✋
-              </span>{' '}
-              {isError?.message || 'Something went wrong'}
-            </p>
-          )}
         </form>
       </main>
     </>

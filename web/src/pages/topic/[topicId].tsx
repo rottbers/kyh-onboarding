@@ -4,51 +4,49 @@ import Head from 'next/head';
 import Link from 'next/link';
 import ErrorPage from 'next/error';
 import { MdDashboard, MdArrowForward } from 'react-icons/md';
-
 import LoadingPage from '../../components/LoadingPage';
 import Header from '../../components/Header';
 import TopicBlockContent from '../../components/TopicBlockContent';
 import TopicQuestions from '../../components/TopicQuestions';
-
-import { useFirebase } from '../../contexts/Firebase';
-import { useContent } from '../../contexts/Content';
+import { useContent, useUserDispatch, useUserState } from '../../contexts';
 import { sanityClient } from '../../utils/sanity';
 
 export default function TopicPage({ topic }) {
-  const { firebase, user } = useFirebase();
+  const { readTopics, completedOnboarding } = useUserState();
+  const userDispatch = useUserDispatch();
   const { topics, program } = useContent();
   const { isFallback, asPath } = useRouter();
   const [nextTopics, setNextTopics] = useState([]);
-
-  useEffect(() => {
-    const next = topics.filter(({ _id }) => !user?.readTopics?.includes(_id));
-    setNextTopics(next);
-  }, [topics, user]);
+  const headingRef = useRef<HTMLHeadingElement>();
 
   const isNotFound = !topic || (typeof topic === 'object' && !Object.keys(topic).length); // prettier-ignore
 
   useEffect(() => {
-    if (!user || !firebase || isNotFound) return;
+    const next = topics.filter(({ _id }) => !readTopics?.includes(_id));
+    setNextTopics(next);
+  }, [topics, readTopics]);
 
-    firebase
-      .firestore()
-      .doc(`users/${user.uid}`)
-      .update({
-        readTopics: firebase.firestore.FieldValue.arrayUnion(topic._id),
-      });
-  }, [firebase, user, isNotFound, topic]);
-
-  const headingRef = useRef();
+  useEffect(() => {
+    if (!isNotFound) {
+      userDispatch({ type: 'READ_TOPIC', data: { topicId: topic._id } });
+    }
+  }, [isNotFound, userDispatch, topic]);
 
   // To prevent the link for the next topic to remain focused
   // we reset focus to the topic heading when the URL changes.
   useEffect(() => {
-    if (!isNotFound && !isFallback) headingRef.current.focus();
+    if (!isNotFound && !isFallback) {
+      headingRef.current.focus();
+    }
   }, [isNotFound, isFallback, asPath]);
 
-  if (isFallback) return <LoadingPage />;
+  if (isFallback) {
+    return <LoadingPage />;
+  }
 
-  if (isNotFound) return <ErrorPage statusCode={404} />;
+  if (isNotFound) {
+    return <ErrorPage statusCode={404} />;
+  }
 
   const nextTopic = nextTopics[0];
 
@@ -82,7 +80,7 @@ export default function TopicPage({ topic }) {
             )}
             <h1
               className="relative z-30 max-w-2xl mx-auto mt-12 sm:my-12 2xl:my-24 text-4xl sm:text-5xl md:text-6xl lg:text-7xl focus:outline-none"
-              tabIndex="-1"
+              tabIndex={-1}
               ref={headingRef}
             >
               {title}
@@ -163,7 +161,7 @@ export default function TopicPage({ topic }) {
           </div>
         </article>
         <nav className="max-w-2xl mx-auto border-t border-gray-200 pt-8 pb-24 flex flex-col sm:flex-row-reverse justify-between">
-          {user?.completedOnboarding ? (
+          {completedOnboarding ? (
             <div className="sm:w-full sm:p4" />
           ) : (
             <Link href={nextTopic ? `/topic/${nextTopic._id}` : '/'}>

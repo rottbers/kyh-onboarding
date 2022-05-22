@@ -1,11 +1,33 @@
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { sanityClient } from '../../../utils/sanity';
 
-export default async function getContent(request, response) {
-  const { method, query: { programId } } = request;
+export type GetContentData =
+  | {
+      data: {
+        topics: any[]; // TODO: add proper type
+        program: unknown; // TODO: add proper type
+      };
+    }
+  | {
+      error: {
+        message: string;
+      };
+    };
+
+export default async function getContent(
+  request: NextApiRequest,
+  response: NextApiResponse<GetContentData>
+) {
+  const {
+    method,
+    query: { programId },
+  } = request;
 
   if (method !== 'GET') {
     response.setHeader('Allow', ['GET']);
-    response.status(405).json({ message: `method ${method} not allowed` });
+    response
+      .status(405)
+      .json({ error: { message: `method ${method} not allowed` } });
     return;
   }
 
@@ -37,14 +59,16 @@ export default async function getContent(request, response) {
     );
 
     if (!Object.keys(program).length) {
-      response.status(404).json({ message: 'no content found for program' });
+      response.status(404).json({ error: { message: 'no content found' } });
     } else {
-      response.status(200).json({ content: { topics, program } });
+      response.status(200).json({ data: { topics, program } });
     }
   } catch (error) {
     const { description } = JSON.parse(error.responseBody).error;
     const { statusCode } = error.response;
 
-    response.status(statusCode || 500).json({ message: description });
+    response
+      .status(statusCode || 500)
+      .json({ error: { message: description } });
   }
 }
