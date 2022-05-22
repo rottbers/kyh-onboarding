@@ -11,7 +11,7 @@ export default function SetupPage({ locations, programs }) {
   const [locationId, setLocationId] = useState('');
   const [programId, setProgramId] = useState('');
 
-  const availablePrograms = useMemo(() => programs.filter((p) => p.locationId === locationId), [locationId]); // prettier-ignore
+  const availablePrograms = useMemo(() => programs.filter((p) => p.locationId === locationId), [locationId, programs]); // prettier-ignore
   const isFirstVisit = user.status === 'not-setup';
   const isInvalidProgramId = !isFirstVisit && !programs.some((p) => p._id === user?.programId); // prettier-ignore
 
@@ -20,9 +20,9 @@ export default function SetupPage({ locations, programs }) {
       setProgramId(user.programId);
       setLocationId(programs.find((p) => p._id === user.programId)?.locationId);
     }
-  }, [user, isFirstVisit]);
+  }, [user, isFirstVisit, programs]);
 
-  function onSubmit(e) {
+  function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     dispatch({ type: 'SETUP', data: { programId } });
     router.push('/');

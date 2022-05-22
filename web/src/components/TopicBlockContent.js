@@ -11,16 +11,15 @@ const TopicBlockContent = ({ blocks }) => {
         const { image, alt, caption } = node;
         return (
           <figure>
-            <div
-              className="bg-cover"
-              style={{ backgroundImage: `url(${image.asset.metadata.lqip})` }}
-            >
+            <div className="bg-cover">
               <Image
                 src={image.asset.url}
                 alt={alt}
                 width={image.asset.metadata.dimensions.width}
                 height={image.asset.metadata.dimensions.height}
                 layout="responsive"
+                placeholder="blur"
+                blurDataURL={image.asset.metadata.lqip}
               />
             </div>
             {caption && <figcaption>{caption}</figcaption>}

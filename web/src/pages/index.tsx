@@ -39,7 +39,7 @@ export default function TopicsPage() {
       setShowConfetti(true);
       userDispatch({ type: 'COMPLETED_ONBOARDING' });
     }
-  }, [user, unreadTopics, readTopics]);
+  }, [user, unreadTopics, readTopics, userDispatch]);
 
   return (
     <>
