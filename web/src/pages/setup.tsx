@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Head from 'next/head';
 import router from 'next/router';
 import Header from '../components/Header';
@@ -11,17 +11,17 @@ export default function SetupPage({ locations, programs }) {
   const dispatch = useUserDispatch();
   const [locationId, setLocationId] = useState('');
   const [programId, setProgramId] = useState('');
+  const [isFirstVisit] = useState(!user.programId);
 
   const availablePrograms = useMemo(() => programs.filter((p) => p.locationId === locationId), [locationId, programs]); // prettier-ignore
-  const isFirstVisit = user.status === 'not-setup';
   const isInvalidProgramId = !isFirstVisit && !programs.some((p) => p._id === user?.programId); // prettier-ignore
 
   useEffect(() => {
-    if (user.programId && !isFirstVisit) {
+    if (user.programId) {
       setProgramId(user.programId);
       setLocationId(programs.find((p) => p._id === user.programId)?.locationId);
     }
-  }, [user, isFirstVisit, programs]);
+  }, [user, programs]);
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
