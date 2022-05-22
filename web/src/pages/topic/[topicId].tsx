@@ -75,7 +75,7 @@ export default function TopicPage({ topic }) {
                     backgroundImage: `url(${image?.url}?auto=format&w=1920&fit=max&sat=-100&q=70)`,
                   }}
                 />
-                <div className="absolute z-20 left-0 top-0 h-full w-full bg-gray-900 opacity-70 bg-gradient-to-br from-blue-opacity-70 to-orange-opacity-70" />
+                <div className="absolute z-20 left-0 top-0 h-full w-full bg-gray-900/30 bg-gradient-to-br from-blue/50 to-orange/50" />
               </>
             )}
             <h1
@@ -165,8 +165,7 @@ export default function TopicPage({ topic }) {
             <div className="sm:w-full sm:p4" />
           ) : (
             <Link href={nextTopic ? `/topic/${nextTopic._id}` : '/'}>
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <a className="text-right w-full p-4 mb-4 sm:mb-0 rounded border border-gray-200 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none focus:ring">
+              <a className="text-right w-full p-4 mb-4 sm:mb-0 rounded border border-gray-200 hover:bg-gray-50 focus-visible:bg-gray-50 focus:outline-none focus-visible:ring">
                 <p className="text-gray-500 text-sm flex flex-row items-center justify-end">
                   {nextTopic
                     ? `Nästa ämne (${topics.length - nextTopics.length + 1} / ${
@@ -185,8 +184,7 @@ export default function TopicPage({ topic }) {
             </Link>
           )}
           <Link href="/">
-            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-            <a className="w-full p-4 sm:mr-4 rounded border border-gray-200 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none focus:ring">
+            <a className="w-full p-4 sm:mr-4 rounded border border-gray-200 hover:bg-gray-50 focus-visible:bg-gray-50 focus:outline-none focus-visible:ring">
               <p className="text-gray-500 text-sm flex flex-row items-center justify-start">
                 <span>
                   {' '}

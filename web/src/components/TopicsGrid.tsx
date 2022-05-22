@@ -1,12 +1,11 @@
 import Link from 'next/link';
 
-// TODO: make card look good
 const TopicCard = ({ title, image, isRead }) => (
   <div
     className={`w-full h-full rounded flex flex-col ${
       isRead
         ? 'bg-gray-900'
-        : 'bg-white bg-gradient-to-br from-orange-opacity-70 to-red-opacity-70'
+        : 'bg-white bg-gradient-to-br from-orange/70 to-red/70'
     }`}
   >
     <div className="h-60 relative">
@@ -33,13 +32,9 @@ const TopicCard = ({ title, image, isRead }) => (
 const TopicsGrid = ({ topics, isRead }) => (
   <ul className="grid gap-4 auto-rows-auto md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
     {topics.map((topic) => (
-      <li
-        key={topic._id}
-        className="rounded shadow hover:shadow-lg focus-within:ring"
-      >
+      <li key={topic._id}>
         <Link href={`/topic/${topic._id}`}>
-          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-          <a className="focus:outline-none">
+          <a className="block rounded shadow hover:shadow-lg focus:outline-none focus-visible:ring">
             <TopicCard
               title={topic.title}
               image={topic?.image}
