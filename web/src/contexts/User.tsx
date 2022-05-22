@@ -88,12 +88,10 @@ function validateState(key: keyof State | '', value: any) {
       }
       throw new Error(`Invalid value for '${key}'. Expected boolean.`);
     }
-    // Reviver callback always seems to include an empty string key..
-    case '': {
-      return value;
-    }
+    // Reviver callback runs for every array item and uses the index as key hence
+    // returning the value here for unknown keys instead of throwing an error
     default:
-      throw new Error(`Unknow key '${key}'`);
+      return value;
   }
 }
 
@@ -127,6 +125,7 @@ export function UserProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   // Update local storage on every state change
+  // TODO: this approach does not play nice across multiple tabs
   useEffect(() => {
     localStorage.setItem(STATE_KEY, JSON.stringify(state));
   }, [state]);
