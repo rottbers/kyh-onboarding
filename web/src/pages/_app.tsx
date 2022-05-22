@@ -1,11 +1,10 @@
+import { AppProps } from 'next/app';
 import Head from 'next/head';
 import '../fonts/index.css';
 import '../styles/tailwind.css';
+import { ContentProvider, UserProvider } from '../contexts';
 
-import { FirebaseProvider, FirebaseAuthorization } from '../contexts/Firebase';
-import { ContentProvider } from '../contexts/Content';
-
-export default function App({ Component, pageProps }) {
+export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
@@ -24,16 +23,12 @@ export default function App({ Component, pageProps }) {
           content="https://kyh-onboarding.vercel.app/social.png"
         />
         <meta property="twitter:card" content="summary_large_image" />
-        <link rel="preconnect" href="https://www.googleapis.com" />
-        <link rel="preconnect" href="https://firestore.googleapis.com" />
       </Head>
-      <FirebaseProvider>
-        <FirebaseAuthorization>
-          <ContentProvider>
-            <Component {...pageProps} />
-          </ContentProvider>
-        </FirebaseAuthorization>
-      </FirebaseProvider>
+      <UserProvider>
+        <ContentProvider>
+          <Component {...pageProps} />
+        </ContentProvider>
+      </UserProvider>
     </>
   );
 }

@@ -2,11 +2,9 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { MdMenu, MdClose } from 'react-icons/md';
 import Logo from './Logo';
-import { useFirebase } from '../contexts/Firebase';
-import { useContent } from '../contexts/Content';
+import { useContent } from '../contexts';
 
 const Header = ({ isDarkBackground }) => {
-  const { firebase, user } = useFirebase();
   const { program } = useContent();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -47,15 +45,6 @@ const Header = ({ isDarkBackground }) => {
           isOpen ? 'opacity-100' : 'w-0 h-0 opacity-0 invisible'
         }`}
       >
-        <img
-          src={user?.photoURL}
-          width={96}
-          height={96}
-          alt="avatar"
-          className="mb-4 rounded-full bg-center bg-cover bg-gray-200"
-        />
-        <p className="text-gray-700">{user?.displayName}</p>
-        <p className="text-gray-700 mb-4">{user?.email}</p>
         {program?.title && program?.location?.title && (
           <p className="text-gray-700 mb-8 italic">
             {program.title}, {program.location.title}
@@ -67,12 +56,6 @@ const Header = ({ isDarkBackground }) => {
             Uppdatera ort eller utbildning
           </a>
         </Link>
-        <button
-          className="font-normal text-xl focus:outline-none focus:underline focus:underline-orange hover:underline hover:underline-orange"
-          onClick={() => firebase.auth().signOut()}
-        >
-          Logga ut
-        </button>
       </div>
     </header>
   );

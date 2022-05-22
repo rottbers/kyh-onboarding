@@ -1,4 +1,4 @@
-import { useContent } from '../contexts/Content';
+import { useContent } from '../contexts';
 
 const TopicsProgress = ({ readTopics, totalTopics }) => {
   const { program } = useContent();
