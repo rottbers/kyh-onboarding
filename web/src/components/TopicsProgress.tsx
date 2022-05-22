@@ -44,7 +44,7 @@ const TopicsProgress = ({ readTopics, totalTopics }) => {
             igen. Om du fortfarande har frågor är du så klart välkommen att höra
             av dig till din utbildningsledare genom{' '}
             <a
-              className="font-semibold focus:outline-none hover:underline focus:underline hover:underline-orange focus:underline-orange"
+              className="font-semibold focus:outline-none hover:underline focus-visible:underline decoration-orange decoration-[0.1rem] underline-offset-4"
               href={`mailto:${program?.email}`}
             >
               {program?.email}
