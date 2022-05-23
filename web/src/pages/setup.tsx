@@ -1,12 +1,16 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Head from 'next/head';
 import router from 'next/router';
+import type { GetStaticProps, InferGetStaticPropsType } from 'next';
 import Header from '../components/Header';
 import Logo from '../components/Logo';
 import { useUserDispatch, useUserState } from '../contexts';
-import { sanityClient } from '../utils/sanity';
+import { sanityClient, groq } from '../utils/sanity';
 
-export default function SetupPage({ locations, programs }) {
+export default function SetupPage({
+  locations,
+  programs,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   const user = useUserState();
   const dispatch = useUserDispatch();
   const [locationId, setLocationId] = useState('');
@@ -161,9 +165,14 @@ export default function SetupPage({ locations, programs }) {
   );
 }
 
-export async function getStaticProps() {
-  const { locations, programs } = await sanityClient.fetch(
-    `{
+type Data = {
+  locations: [{ _id: string; title: string }];
+  programs: [{ _id: string; title: string; locationId: string }];
+};
+
+export const getStaticProps: GetStaticProps<Data> = async () => {
+  const query = groq`
+    {
       "locations": *[_type == "location" && !(_id in path('drafts.**'))] | order(title asc) {
         _id,
         title,
@@ -173,8 +182,10 @@ export async function getStaticProps() {
         title,
         "locationId": location._ref
       }
-    }`
-  );
+    }
+  `;
+
+  const { locations, programs } = await sanityClient.fetch<Data>(query);
 
   return { props: { locations, programs }, revalidate: 30 };
-}
+};

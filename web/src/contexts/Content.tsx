@@ -1,38 +1,11 @@
 import { createContext, useContext, useEffect, useReducer } from 'react';
 import router from 'next/router';
 import { useUserState } from './User';
-
-/** TODO: look into codegen */
-type Program = {
-  _id: string;
-  classCodes: [];
-  csn: [
-    {
-      endDate: string;
-      points: number;
-      semester: string;
-      startDate: string;
-      weeks: number;
-    }
-  ];
-  email: string;
-  location: {
-    title: string;
-  };
-  title: string;
-};
-
-/** TODO: look into codegen */
-type Topic = {
-  image: {
-    metadata: {
-      lqip: string;
-    };
-    url: string;
-  };
-  _id: string;
-  title: string;
-};
+import type {
+  Program,
+  Topic,
+  GetContentData,
+} from '../pages/api/content/[programId]';
 
 type State = {
   status: 'idle' | 'loading' | 'success' | 'error';
@@ -109,7 +82,7 @@ export const ContentProvider = ({ children }) => {
 
       try {
         const response = await fetch(`/api/content/${programId}`);
-        const { data, error } = await response.json(); // TODO: add type
+        const { data, error }: GetContentData = await response.json();
 
         // getContent only runs if the user got a programId so if our
         // API returns a 404 we can assume the users programId no longer exist
@@ -119,12 +92,12 @@ export const ContentProvider = ({ children }) => {
           return;
         }
 
-        if (!response.ok) {
+        if (!response.ok || !data || error) {
           dispatch({
             type: 'ERROR',
             error: {
               code: response.status,
-              message: `${response.statusText}, ${error.message}`,
+              message: `${response.statusText}, ${error?.message}`,
             },
           });
           return;

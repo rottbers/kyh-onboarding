@@ -3,15 +3,18 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
 import ErrorPage from 'next/error';
+import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
 import { MdDashboard, MdArrowForward } from 'react-icons/md';
 import LoadingPage from '../../components/LoadingPage';
 import Header from '../../components/Header';
 import TopicBlockContent from '../../components/TopicBlockContent';
 import TopicQuestions from '../../components/TopicQuestions';
 import { useContent, useUserDispatch, useUserState } from '../../contexts';
-import { sanityClient } from '../../utils/sanity';
+import { sanityClient, groq } from '../../utils/sanity';
 
-export default function TopicPage({ topic }) {
+export default function TopicPage({
+  topic,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   const { readTopics, completedOnboarding } = useUserState();
   const userDispatch = useUserDispatch();
   const { topics, program } = useContent();
@@ -204,21 +207,46 @@ export default function TopicPage({ topic }) {
   );
 }
 
-export async function getStaticPaths() {
-  const topics = await sanityClient.fetch(
-    `*[_type == "topic" && !(_id in path('drafts.**'))] {
-      _id
-    }`
-  );
+type Params = {
+  topicId: string;
+};
 
-  const paths = topics.map((topic) => ({ params: { topicId: topic._id } }));
+export const getStaticPaths: GetStaticPaths<Params> = async () => {
+  const query = groq`
+    *[_type == "topic" && !(_id in path('drafts.**'))] {
+      "topicId": _id
+    }
+  `;
+
+  const topics = await sanityClient.fetch<Params[]>(query);
+
+  const paths = topics.map(({ topicId }) => ({ params: { topicId } }));
 
   return { paths, fallback: true };
-}
+};
 
-export async function getStaticProps({ params }) {
-  const topic = await sanityClient.fetch(
-    `*[_type == "topic" && _id == "${params.topicId}" && !(_id in path('drafts.**'))][0] {
+type Data = {
+  _id: string;
+  image?: {
+    metadata: {
+      lqip: string;
+    };
+    url: string;
+  };
+  title: string;
+  body: unknown;
+  options: {
+    showCSN: boolean;
+    showClassCodes: boolean;
+  };
+  questions?: unknown;
+};
+
+export const getStaticProps: GetStaticProps<{ topic: Data }, Params> = async ({
+  params,
+}) => {
+  const query = groq`
+    *[_type == "topic" && _id == "${params.topicId}" && !(_id in path('drafts.**'))][0] {
         _id,
         "image": image.asset-> {
           url,
@@ -238,8 +266,10 @@ export async function getStaticProps({ params }) {
         },
         options,
         questions,
-    }`
-  );
+    }
+  `;
+
+  const topic = await sanityClient.fetch<Data>(query);
 
   return { props: { topic }, revalidate: 30 };
-}
+};
