@@ -72,7 +72,7 @@ const initialState: State = {
 
 const ContentContext = createContext(initialState);
 
-export const ContentProvider = ({ children }) => {
+export function ContentProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { programId } = useUserState();
 
@@ -105,7 +105,11 @@ export const ContentProvider = ({ children }) => {
 
         dispatch({ type: 'SUCCESS', data });
       } catch (error) {
-        dispatch({ type: 'ERROR', error: { message: error.message } });
+        let message = 'Something went wrong getting content';
+        if (error instanceof Error) {
+          message = error.message;
+        }
+        dispatch({ type: 'ERROR', error: { message } });
       }
     }
 
@@ -120,6 +124,6 @@ export const ContentProvider = ({ children }) => {
   return (
     <ContentContext.Provider value={state}>{children}</ContentContext.Provider>
   );
-};
+}
 
 export const useContent = () => useContext(ContentContext);

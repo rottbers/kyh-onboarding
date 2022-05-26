@@ -1,6 +1,11 @@
 import Link from 'next/link';
+import type { Topic } from '../pages/api/content/[programId]';
 
-const TopicCard = ({ title, image, isRead }) => (
+type TopicCardProps = Pick<Topic, 'image' | 'title'> & {
+  isRead: boolean;
+};
+
+const TopicCard = ({ title, image, isRead }: TopicCardProps) => (
   <div
     className={`w-full h-full rounded flex flex-col ${
       isRead
@@ -29,7 +34,12 @@ const TopicCard = ({ title, image, isRead }) => (
   </div>
 );
 
-const TopicsGrid = ({ topics, isRead }) => (
+type TopicsGridProps = {
+  topics: Topic[];
+  isRead: boolean;
+};
+
+const TopicsGrid = ({ topics, isRead }: TopicsGridProps) => (
   <ul className="grid gap-4 auto-rows-auto md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
     {topics.map((topic) => (
       <li key={topic._id}>

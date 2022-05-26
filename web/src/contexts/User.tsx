@@ -62,10 +62,12 @@ function reducer(state: State, action: Action): State {
   }
 }
 
-function validateState(key: keyof State | '', value: any) {
-  switch (key) {
+function validateState(key: any, value: any) {
+  const statuses: State['status'][] = ['setup', 'not-setup'];
+
+  switch (key as keyof State) {
     case 'status': {
-      if (['setup', 'non-setup'].includes(value)) {
+      if (statuses.includes(value)) {
         return value;
       }
       throw new Error(`Invalid value for '${key}'.'`);
@@ -121,7 +123,7 @@ const initialState = ((): State => {
 const UserStateContext = createContext<State>(initialState);
 const UserDispatchContext = createContext<React.Dispatch<Action>>(() => null);
 
-export function UserProvider({ children }) {
+export function UserProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   // Update local storage on every state change

@@ -5,12 +5,15 @@ import Link from 'next/link';
 import ErrorPage from 'next/error';
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
 import { MdDashboard, MdArrowForward } from 'react-icons/md';
-import LoadingPage from '../../components/LoadingPage';
-import Header from '../../components/Header';
-import TopicBlockContent from '../../components/TopicBlockContent';
-import TopicQuestions from '../../components/TopicQuestions';
+import {
+  Header,
+  LoadingPage,
+  TopicBlockContent,
+  TopicQuestions,
+} from '../../components';
 import { useContent, useUserDispatch, useUserState } from '../../contexts';
 import { sanityClient, groq } from '../../utils/sanity';
+import type { Topic } from '../api/content/[programId]';
 
 export default function TopicPage({
   topic,
@@ -19,8 +22,8 @@ export default function TopicPage({
   const userDispatch = useUserDispatch();
   const { topics, program } = useContent();
   const { isFallback, asPath } = useRouter();
-  const [nextTopics, setNextTopics] = useState([]);
-  const headingRef = useRef<HTMLHeadingElement>();
+  const [nextTopics, setNextTopics] = useState<Topic[]>([]);
+  const headingRef = useRef<HTMLHeadingElement>(null);
 
   const isNotFound = !topic || (typeof topic === 'object' && !Object.keys(topic).length); // prettier-ignore
 
@@ -38,7 +41,7 @@ export default function TopicPage({
   // To prevent the link for the next topic to remain focused
   // we reset focus to the topic heading when the URL changes.
   useEffect(() => {
-    if (!isNotFound && !isFallback) {
+    if (!isNotFound && !isFallback && headingRef.current) {
       headingRef.current.focus();
     }
   }, [isNotFound, isFallback, asPath]);
@@ -90,7 +93,7 @@ export default function TopicPage({
             </h1>
           </header>
           <div className="max-w-2xl mx-auto my-8">
-            <TopicBlockContent blocks={body} />
+            <TopicBlockContent value={body} />
             {options?.showCSN && (
               <>
                 {program?.csn ? (
@@ -160,7 +163,7 @@ export default function TopicPage({
                 )}
               </>
             )}
-            <TopicQuestions questions={questions} />
+            {questions && <TopicQuestions questions={questions} />}
           </div>
         </article>
         <nav className="max-w-2xl mx-auto border-t border-gray-200 pt-8 pb-24 flex flex-col sm:flex-row-reverse justify-between">
@@ -239,14 +242,20 @@ type Data = {
     showCSN: boolean;
     showClassCodes: boolean;
   };
-  questions?: unknown;
+  questions?: [
+    {
+      _key: string;
+      question: string;
+      answer: any;
+    }
+  ];
 };
 
 export const getStaticProps: GetStaticProps<{ topic: Data }, Params> = async ({
   params,
 }) => {
   const query = groq`
-    *[_type == "topic" && _id == "${params.topicId}" && !(_id in path('drafts.**'))][0] {
+    *[_type == "topic" && _id == "${params?.topicId}" && !(_id in path('drafts.**'))][0] {
         _id,
         "image": image.asset-> {
           url,

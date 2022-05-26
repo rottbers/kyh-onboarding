@@ -2,7 +2,14 @@ import { useState } from 'react';
 import { FaPlus, FaMinus } from 'react-icons/fa';
 import TopicBlockContent from './TopicBlockContent';
 
-const TopicQuestion = ({ question, answer, id }) => {
+/** TODO: look into proper type for `value` */
+type TopicQuestionProps = {
+  id: string;
+  question: string;
+  answer: any;
+};
+
+const TopicQuestion = ({ question, answer, id }: TopicQuestionProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -27,13 +34,24 @@ const TopicQuestion = ({ question, answer, id }) => {
         id={`question-body-${id}`}
         hidden={!isOpen}
       >
-        <TopicBlockContent blocks={answer} />
+        <TopicBlockContent value={answer} />
       </div>
     </>
   );
 };
 
-const TopicQuestions = ({ questions }) => (
+/** TODO: look into proper type for `value` */
+type TopicQuestionsProps = {
+  questions: [
+    {
+      _key: string;
+      question: string;
+      answer: any;
+    }
+  ];
+};
+
+const TopicQuestions = ({ questions }: TopicQuestionsProps) => (
   <>
     {questions && (
       <>

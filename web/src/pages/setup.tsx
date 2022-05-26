@@ -2,8 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Head from 'next/head';
 import router from 'next/router';
 import type { GetStaticProps, InferGetStaticPropsType } from 'next';
-import Header from '../components/Header';
-import Logo from '../components/Logo';
+import { Header, Logo } from '../components';
 import { useUserDispatch, useUserState } from '../contexts';
 import { sanityClient, groq } from '../utils/sanity';
 
@@ -23,7 +22,9 @@ export default function SetupPage({
   useEffect(() => {
     if (user.programId) {
       setProgramId(user.programId);
-      setLocationId(programs.find((p) => p._id === user.programId)?.locationId);
+      setLocationId(
+        programs.find((p) => p._id === user.programId)?.locationId ?? ''
+      );
     }
   }, [user, programs]);
 
