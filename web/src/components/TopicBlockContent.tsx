@@ -3,7 +3,7 @@ import Image from 'next/image';
 import getYouTubeId from 'get-youtube-id';
 import { PortableText } from '@portabletext/react';
 
-// TODO: look into proper type for `value`
+/** TODO: look into proper type for `value` */
 export default function TopicBlockContent({ value }: { value: any }) {
   return (
     <div className="topic-content">
