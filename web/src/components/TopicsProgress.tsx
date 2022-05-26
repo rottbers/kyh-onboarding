@@ -1,6 +1,11 @@
 import { useContent } from '../contexts';
 
-const TopicsProgress = ({ readTopics, totalTopics }) => {
+type TopicsProgressProps = {
+  readTopics: number;
+  totalTopics: number;
+};
+
+const TopicsProgress = ({ readTopics, totalTopics }: TopicsProgressProps) => {
   const { program } = useContent();
 
   return (

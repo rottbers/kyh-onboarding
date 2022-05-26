@@ -1,3 +1,4 @@
+import { ClientError } from '@sanity/client';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { sanityClient, groq } from '../../../utils/sanity';
 
@@ -101,11 +102,14 @@ export default async function getContent(
       response.status(200).json({ data: { topics, program } });
     }
   } catch (error) {
-    const { description } = JSON.parse(error.responseBody).error;
-    const { statusCode } = error.response;
+    let statusCode = 500;
+    let message = 'Something went wrong';
 
-    response
-      .status(statusCode || 500)
-      .json({ error: { message: description } });
+    if (error instanceof ClientError) {
+      statusCode = error.statusCode;
+      message = error.message;
+    }
+
+    response.status(statusCode).json({ error: { message } });
   }
 }

@@ -2,23 +2,21 @@ import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import ErrorPage from 'next/error';
 import Confetti from 'react-confetti';
-import Header from '../components/Header';
-import TopicsProgress from '../components/TopicsProgress';
-import TopicsGrid from '../components/TopicsGrid';
-import LoadingPage from '../components/LoadingPage';
+import { Header, LoadingPage, TopicsProgress, TopicsGrid } from '../components';
 import { useContent, useUserDispatch, useUserState } from '../contexts';
+import type { Topic } from './api/content/[programId]';
 
 export default function TopicsPage() {
   const user = useUserState();
   const userDispatch = useUserDispatch();
   const { topics, status, error } = useContent();
-  const [readTopics, setReadTopics] = useState([]);
-  const [unreadTopics, setUnreadTopics] = useState([]);
+  const [readTopics, setReadTopics] = useState<Topic[]>([]);
+  const [unreadTopics, setUnreadTopics] = useState<Topic[]>([]);
   const [showConfetti, setShowConfetti] = useState(false);
 
   useEffect(() => {
-    const read = [];
-    const unread = [];
+    const read: Topic[] = [];
+    const unread: Topic[] = [];
 
     topics.forEach((topic) => {
       user.readTopics.includes(topic._id)
@@ -65,7 +63,7 @@ export default function TopicsPage() {
         )}
         {status === 'error' && (
           <div className="fixed top-0 left-0 w-full">
-            <ErrorPage statusCode={error?.code} title={error.message} />
+            <ErrorPage statusCode={error?.code ?? 500} title={error?.message} />
           </div>
         )}
         {status === 'success' && (
