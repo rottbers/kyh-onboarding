@@ -17,7 +17,8 @@ type State =
 type Action =
   | { type: 'READ_TOPIC'; data: { topicId: string } }
   | { type: 'SETUP'; data: { programId: string } }
-  | { type: 'COMPLETED_ONBOARDING' };
+  | { type: 'COMPLETED_ONBOARDING' }
+  | { type: 'SYNC_STATE'; data: { state: State } };
 
 function reducer(state: State, action: Action): State {
   switch (state.status) {
@@ -26,6 +27,9 @@ function reducer(state: State, action: Action): State {
         case 'SETUP': {
           const { programId } = action.data;
           return { ...state, status: 'setup', programId };
+        }
+        case 'SYNC_STATE': {
+          return action.data.state;
         }
         default:
           return state;
@@ -42,18 +46,16 @@ function reducer(state: State, action: Action): State {
         }
         case 'SETUP': {
           const { programId } = action.data;
-          return {
-            ...state,
-            status: 'setup',
-            programId,
-            completedOnboarding: false,
-          };
+          return { ...state, status: 'setup', programId };
         }
         case 'COMPLETED_ONBOARDING': {
           if (state.completedOnboarding) {
             return state;
           }
           return { ...state, completedOnboarding: true };
+        }
+        case 'SYNC_STATE': {
+          return action.data.state;
         }
         default:
           return state;
@@ -126,11 +128,37 @@ const UserDispatchContext = createContext<React.Dispatch<Action>>(() => null);
 export function UserProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  // Update local storage on every state change
-  // TODO: this approach does not play nice across multiple tabs
   useEffect(() => {
-    localStorage.setItem(STATE_KEY, JSON.stringify(state));
+    const stateString = JSON.stringify(state);
+    // Update local storage on every state change
+    if (stateString !== localStorage.getItem(STATE_KEY)) {
+      localStorage.setItem(STATE_KEY, stateString);
+    }
   }, [state]);
+
+  useEffect(() => {
+    function handleStateChangeInOtherTab(e: StorageEvent) {
+      try {
+        // On update
+        if (e.key === STATE_KEY && e.oldValue && e.newValue) {
+          const newState: State = JSON.parse(e.newValue, validateState);
+          dispatch({ type: 'SYNC_STATE', data: { state: newState } });
+        }
+        // On delete
+        if (e.key === STATE_KEY && e.oldValue && !e.newValue) {
+          dispatch({ type: 'SYNC_STATE', data: { state: defaultState } });
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    window.addEventListener('storage', handleStateChangeInOtherTab);
+
+    return () => {
+      window.removeEventListener('storage', handleStateChangeInOtherTab);
+    };
+  }, [dispatch]);
 
   return (
     <UserStateContext.Provider value={state}>
