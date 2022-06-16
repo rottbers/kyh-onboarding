@@ -71,7 +71,7 @@ export default async function getContent(
   try {
     const query = groq`
     {
-      "topics": *[_type == "topic" && programs[]._ref == "${programId}" && !(_id in path('drafts.**'))] {
+      "topics": *[_type == "topic" && programs[]._ref == "${programId}" && !(_id in path('drafts.**'))] | order(order asc) {
         _id,
         title,
         "image": image.asset-> {
